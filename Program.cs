@@ -20,7 +20,7 @@ while (true)
 {
     string currentTime = Utils.GetCurrentTime(false, true);
 
-    if (currentTime == "20" &&
+    if (currentTime == "12" &&
     currentDay != Utils.GetCurrentDate())
     {
         //Handling the swe birthday person.
@@ -53,19 +53,19 @@ while (true)
         var subscribedEmails = sverigeApi.GetSubscribers();
 
         //Adding to emaillist.
-        // foreach (var emails in subscribedEmails)
-        // {
-        //     try
-        //     {
-        //         message.To.Add(emails);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e);
-        //     }
-        // }
+        foreach (var emails in subscribedEmails)
+        {
+            try
+            {
+                message.To.Add(emails);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
         // message.To.Add("henrik.kjellberg46@gmail.com");
-        message.To.Add("henrik1995a@live.se");
+        // message.To.Add("henrik1995a@live.se");
 
 
         EmailBuilder emailBuilder = new();
