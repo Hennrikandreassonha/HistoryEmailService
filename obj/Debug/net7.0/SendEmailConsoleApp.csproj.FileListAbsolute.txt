@@ -1,0 +1,17 @@
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\bin\Debug\net7.0\SendEmailConsoleApp.exe
+c:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\bin\Debug\net7.0\SendEmailConsoleApp.deps.json
+c:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\bin\Debug\net7.0\SendEmailConsoleApp.runtimeconfig.json
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\bin\Debug\net7.0\SendEmailConsoleApp.dll
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\bin\Debug\net7.0\SendEmailConsoleApp.pdb
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.csproj.AssemblyReference.cache
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.AssemblyInfoInputs.cache
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.AssemblyInfo.cs
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.csproj.CoreCompileInputs.cache
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.dll
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\refint\SendEmailConsoleApp.dll
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.pdb
+c:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.genruntimeconfig.cache
+c:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\ref\SendEmailConsoleApp.dll
+C:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\bin\Debug\net7.0\Newtonsoft.Json.dll
+c:\Users\Dator\Документы\VSCODE\SendEmailConsoleApp\obj\Debug\net7.0\SendEmailConsoleApp.csproj.CopyComplete
