@@ -74,7 +74,7 @@ while (true)
         message.IsBodyHtml = true;
 
         smtpClient.Send(message);
-
+        //Jas
         currentDay = Utils.GetCurrentDate();
     }
 }
