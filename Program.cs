@@ -50,22 +50,22 @@ while (true)
         //Getting the subscribed users from WebsiteApi.
         DagensSverigeApi sverigeApi = new DagensSverigeApi(wikiApiClient);
 
-        var subscribedEmails = sverigeApi.GetSubscribers();
+        // var subscribedEmails = sverigeApi.GetSubscribers();
 
         //Adding to emaillist.
-        foreach (var emails in subscribedEmails)
-        {
-            try
-            {
-                message.To.Add(emails);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
+        // foreach (var emails in subscribedEmails)
+        // {
+        //     try
+        //     {
+        //         message.To.Add(emails);
+        //     }
+        //     catch (Exception e)
+        //     {
+        //         Console.WriteLine(e);
+        //     }
+        // }
         // message.To.Add("henrik.kjellberg46@gmail.com");
-        // message.To.Add("henrik1995a@live.se");
+        message.To.Add("henrik1995a@live.se");
 
 
         EmailBuilder emailBuilder = new();
