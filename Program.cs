@@ -18,6 +18,8 @@ string currentDay = "";
 
 while (true)
 {
+    Console.WriteLine("Test");
+
     string currentTime = Utils.GetCurrentTime(false, true);
 
     if (currentTime == "08" &&
@@ -77,4 +79,5 @@ while (true)
         //Jas
         currentDay = Utils.GetCurrentDate();
     }
+    Thread.Sleep(5000);
 }
