@@ -20,7 +20,7 @@ while (true)
 {
     string currentTime = Utils.GetCurrentTime(false, true);
 
-    if (currentTime == "12" &&
+    if (
     currentDay != Utils.GetCurrentDate())
     {
         //Handling the swe birthday person.
