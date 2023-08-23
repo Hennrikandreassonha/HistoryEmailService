@@ -20,7 +20,7 @@ while (true)
 {
     string currentTime = Utils.GetCurrentTime(false, true);
 
-    if (
+    if (currentTime == "08" &&
     currentDay != Utils.GetCurrentDate())
     {
         //Handling the swe birthday person.
@@ -64,9 +64,9 @@ while (true)
         //         Console.WriteLine(e);
         //     }
         // }
-        // message.To.Add("henrik.kjellberg46@gmail.com");
+        message.To.Add("henrik.kjellberg46@gmail.com");
         message.To.Add("henrik1995a@live.se");
-
+        message.To.Add("andreasson6300@gmail.com");
 
         EmailBuilder emailBuilder = new();
         message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent);
