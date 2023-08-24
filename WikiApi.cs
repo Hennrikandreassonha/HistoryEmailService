@@ -24,6 +24,7 @@ namespace SendEmailConsoleApp
         public string Heading { get; set; } = null!;
         //The extract is the text
         public string Extract { get; set; } = null!;
+        public string Year { get; set; } = null!;
         public string ImageUrl { get; set; } = null!;
         public string PageUrl { get; set; } = null!;
 
@@ -155,6 +156,7 @@ namespace SendEmailConsoleApp
                     {
                         eventWithLength.Heading = item.text;
                         eventWithLength.Extract = item.pages[0].extract;
+                        eventWithLength.Year = item.year;
                         eventWithLength.ImageUrl = item.pages[0].thumbnail.source;
                         eventWithLength.PageUrl = item.pages[0].content_urls.desktop.page;
 

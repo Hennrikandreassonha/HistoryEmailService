@@ -28,7 +28,7 @@ namespace SendEmailConsoleApp
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'>  
                     
                     <h1 style= 'color: {sweColorYellow}; padding: 0.5rem;' 
-                    >Dagens Händelse {date}</h1>
+                    >Dagens händelse ägde rum den {date} år {todaysEvent.Year}.</h1>
                   
                 </div>
 
