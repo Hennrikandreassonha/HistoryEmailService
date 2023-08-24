@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Runtime.InteropServices;
+using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Mail;
 using Newtonsoft.Json;
@@ -18,9 +19,11 @@ while (true)
 
     string currentTime = Utils.GetCurrentTime(false, true);
 
-    if (currentTime == "08" &&
+    if (currentTime == "09" &&
     currentDay != Utils.GetCurrentDate())
     {
+        Console.WriteLine("Skickar mail");
+
         dynamic response = wikiApi.GetRandomTest();
 
         var currentDate = Utils.GetCurrentTime();
