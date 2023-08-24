@@ -133,14 +133,22 @@ namespace SendEmailConsoleApp
                 string extractLength = item.pages[0].extract;
                 int extractLengthInt = extractLength.Length;
                 // Performing a check in case imageUrls are null, as we require an image in the email.
-                if (item.pages[0]?.thumbnail?.source == null ||
-                    item.pages[1]?.thumbnail?.source == null)
+
+
+                var picNumbOne = item.pages[0].thumbnail;
+                // string? picNumbOne = item.pages[0].thumbnail?.source;
+
+                string? picNumbTwo = item.pages.Count > 1 ? item.pages[1]?.thumbnail?.source : null;
+
+
+                if (picNumbOne == null || picNumbTwo == null)
                 {
                     continue;
                 }
+                picNumbOne = item.pages[0].thumbnail.source;
 
                 //Each even has an amount of pages. Every page is a related article.
-                foreach (var page in item.pages)
+                foreach (dynamic? page in item.pages)
                 {
 
                     if (page == null || pageCount >= 2 && extractLengthInt > 500)

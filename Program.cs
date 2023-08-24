@@ -10,10 +10,6 @@ HttpClient wikiApiClient = new HttpClient();
 
 WikiApi wikiApi = new WikiApi(wikiApiClient);
 
-dynamic response = wikiApi.GetRandomTest();
-
-var currentDate = Utils.GetCurrentTime();
-
 string currentDay = "";
 
 while (true)
@@ -25,6 +21,10 @@ while (true)
     if (currentTime == "08" &&
     currentDay != Utils.GetCurrentDate())
     {
+        dynamic response = wikiApi.GetRandomTest();
+
+        var currentDate = Utils.GetCurrentTime();
+
         //Handling the swe birthday person.
         var allBirths = wikiApi.GetBirths(response);
         List<SweUser> sweBirths = wikiApi.GetSwePersons(allBirths);
@@ -69,6 +69,8 @@ while (true)
         message.To.Add("henrik.kjellberg46@gmail.com");
         message.To.Add("henrik1995a@live.se");
         message.To.Add("andreasson6300@gmail.com");
+        message.To.Add("Richard.jurmo.berg@gmail.com");
+
 
         EmailBuilder emailBuilder = new();
         message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent);
