@@ -54,7 +54,7 @@ namespace SendEmailConsoleApp
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'>  
                 
-                    <h1 style= 'color: {sweColorYellow}; padding: 0.5rem;'>Dagens födelseperson föddes <br> 
+                    <h1 style= 'color: {sweColorYellow}; padding: 0.5rem;'>Dagens födelseperson född <br> 
                     {date} - {swePerson.BirthYear}.</h1>
                  
                 </div>
