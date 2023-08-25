@@ -80,7 +80,7 @@ namespace SendEmailConsoleApp
             {
                 string personTextControl = person.text;
 
-                if (personTextControl.Contains("svensk", StringComparison.OrdinalIgnoreCase))
+                if (personTextControl.Contains("svensk", StringComparison.OrdinalIgnoreCase) && person.pages.Count != 0)
                 {
                     string[] personSplitted = personTextControl.Split(',');
 
