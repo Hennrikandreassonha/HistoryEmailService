@@ -5,31 +5,33 @@ using System.Threading.Tasks;
 
 namespace SendEmailConsoleApp
 {
-    public class EmailBuilder
+  public class EmailBuilder
+  {
+    public EmailBuilder()
     {
-        public EmailBuilder()
-        {
-        }
-        public string GetEmailContent(SweUser swePerson, TodaysEvent todaysEvent)
-        {
-            var date = Utils.GetCurrentDate();
+    }
+    public string GetEmailContent(SweUser swePerson, TodaysEvent todaysEvent)
+    {
+      var date = Utils.GetCurrentDate();
 
-            var formatedEventText = FormatText(todaysEvent.Extract);
-            var secondFormatedEventText = FormatText(todaysEvent.SecondArticleExtract);
+      var formatedEventText = FormatText(todaysEvent.Extract);
+      var secondFormatedEventText = FormatText(todaysEvent.SecondArticleExtract);
 
-            var sweColorYellow = "#ffcd00";
-            var sweColorBlue = "#004b87";
+      var sweColorYellow = "#ffcd00";
+      var sweColorBlue = "#004b87";
 
 
-            return $@"
+      return $@"
             <html>
               <body>
   
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'>  
                     
-                    <h1 style= 'color: {sweColorYellow}; padding: 0.5rem;' 
-                    >Dagens händelse ägde rum den {date} år {todaysEvent.Year}.</h1>
-                  
+                    <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
+                      Dagens händelse ägde rum <br>
+                       {date} - {todaysEvent.Year}.
+                    </h1>
+
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
@@ -52,13 +54,13 @@ namespace SendEmailConsoleApp
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'>  
                 
-                    <h1 style= 'color: {sweColorYellow}; padding: 0.5rem;'>Dagens födelseperson</h1>
+                    <h1 style= 'color: {sweColorYellow}; padding: 0.5rem;'>Dagens födelseperson föddes <br> 
+                    {date} - {swePerson.BirthYear}.</h1>
                  
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
             
-                  <h2><strong>{swePerson.Name}</strong> född <u>{swePerson.BirthYear}</u>/{date}</h2>
                   <p>{swePerson.Text}</p>
                   <img src='{swePerson.ImageUrl}'/>
                   <p>Läs mer om dagens födelseperson på: <a href='{swePerson.PageUrl}'>Wikipedia</a></p>
@@ -67,29 +69,29 @@ namespace SendEmailConsoleApp
               </body>
             </html>
             ";
-        }
-        public static string FormatText(string extract)
-        {
-            var splittedText = extract.Split('.');
-            string formatedText = "<p>";
-
-            //Every sentence is an index
-            //Insert new <p> every third sentence.
-            //Use modulus?
-
-            for (int i = 0; i < splittedText.Length; i++)
-            {
-
-                if (i % 3 == 0)
-                    formatedText += $@"</p> <p>";
-
-                if (splittedText[i] != "")
-                    formatedText += $"{splittedText[i]}.";
-            }
-
-            formatedText += "</p>";
-
-            return formatedText;
-        }
     }
+    public static string FormatText(string extract)
+    {
+      var splittedText = extract.Split('.');
+      string formatedText = "<p>";
+
+      //Every sentence is an index
+      //Insert new <p> every third sentence.
+      //Use modulus?
+
+      for (int i = 0; i < splittedText.Length; i++)
+      {
+
+        if (i % 3 == 0)
+          formatedText += $@"</p> <p>";
+
+        if (splittedText[i] != "")
+          formatedText += $"{splittedText[i]}.";
+      }
+
+      formatedText += "</p>";
+
+      return formatedText;
+    }
+  }
 }
