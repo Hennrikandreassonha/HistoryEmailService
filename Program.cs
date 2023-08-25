@@ -72,9 +72,11 @@ while (true)
         message.To.Add("henrik1995a@live.se");
         
         message.To.Add("Karin.eh@hotmail.se");
-        // message.To.Add("henrik.kjellberg46@gmail.com");
-        // message.To.Add("andreasson6300@gmail.com");
-        // message.To.Add("Richard.jurmo.berg@gmail.com");
+        message.To.Add("henrik.kjellberg46@gmail.com");
+        message.To.Add("andreasson6300@gmail.com");
+        message.To.Add("Richard.jurmo.berg@gmail.com");
+        message.To.Add("Victor.kaka@hotmail.com");
+
 
         EmailBuilder emailBuilder = new();
         message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent);
