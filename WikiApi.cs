@@ -19,6 +19,11 @@ namespace SendEmailConsoleApp
         public required string ImageUrl { get; set; }
         public required string PageUrl { get; set; }
     }
+    // public class WikiPerson
+    // {
+    //     public required string Name { get; set; }
+    //     public required string WikiUrl { get; set; }
+    // }
     public class TodaysEvent
     {
         public string Heading { get; set; } = null!;
@@ -118,6 +123,51 @@ namespace SendEmailConsoleApp
                     if (!PersonHasBoringBirthDate(swePerson) && swePerson.ImageUrl != "")
                         swePersons.Add(swePerson);
                 }
+            }
+            return swePersons;
+        }
+        public List<SweUser> GetMoreSweBirths(dynamic? allSweBirths)
+        {
+
+            List<SweUser> swePersons = new();
+
+            foreach (var person in allSweBirths)
+            {
+                string personTextControl = person.text;
+
+                int personPagesCount = person.pages.Count;
+
+                if (personTextControl.Contains("svensk", StringComparison.OrdinalIgnoreCase) &&
+                person.pages.Count != 0)
+                {
+                    string[] personSplitted = personTextControl.Split(',');
+
+                    string personHeading = "";
+                    for (int index = 1; index < personSplitted.Length; index++)
+                    {
+                        personHeading += personSplitted[index];
+                    }
+
+                    personHeading = personHeading.TrimStart();
+                    personHeading = CapitalizeFirstLetter(personHeading);
+                    string personText = person.pages[0].extract;
+                    string personUrl = person.pages[0].content_urls.desktop.page;
+
+                    Console.WriteLine(personUrl);
+
+                    SweUser swePerson = new SweUser()
+                    {
+                        Name = personSplitted[0],
+                        Heading = personHeading,
+                        Text = personText,
+                        BirthYear = person.year,
+                        PageUrl = personUrl,
+                        ImageUrl = ""
+                    };
+
+                    swePersons.Add(swePerson);
+                }
+
             }
             return swePersons;
         }

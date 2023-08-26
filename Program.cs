@@ -5,7 +5,7 @@ using System.Net.Mail;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SendEmailConsoleApp;
-
+using System.Security.Cryptography.X509Certificates;
 
 HttpClient wikiApiClient = new HttpClient();
 
@@ -15,11 +15,12 @@ string currentDay = "";
 
 while (true)
 {
-    Console.WriteLine("Test");
+    Console.WriteLine("I loop");
 
+    //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
-
-    if (currentTime == "08" &&
+    
+    if (currentTime == "07" &&
     currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
@@ -28,8 +29,16 @@ while (true)
 
         //Handling the swe birthday person.
         var allBirths = wikiApi.GetBirths(response);
+
         List<SweUser> sweBirths = wikiApi.GetSwePersons(allBirths);
-        var swePerson = sweBirths[wikiApi.GetRandomIndex(sweBirths.Count)];
+        var swePerson = sweBirths.OrderByDescending(x => x.Text.Length).FirstOrDefault();
+
+        //For the "more swede birth" section.
+        List<SweUser> moreSweBirths = wikiApi.GetMoreSweBirths(allBirths);
+
+        //Removing the featured sweperson.
+        //The rest will be displayed below as "more swe birth persons".
+        moreSweBirths = moreSweBirths.OrderBy(x => x.BirthYear).Where(x => x.PageUrl != swePerson.PageUrl).ToList();
 
         //Handling the event of the day
         var allEvents = response.selected;
@@ -70,7 +79,7 @@ while (true)
 
         //Egentligen ska man hämta från ett api men sidan är inte live.
         message.To.Add("henrik1995a@live.se");
-        
+
         message.To.Add("Karin.eh@hotmail.se");
         message.To.Add("henrik.kjellberg46@gmail.com");
         message.To.Add("andreasson6300@gmail.com");
@@ -78,9 +87,8 @@ while (true)
         message.To.Add("Victor.kaka@hotmail.com");
         message.To.Add("matilda.herngren@outlook.com");
 
-
         EmailBuilder emailBuilder = new();
-        message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent);
+        message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent, moreSweBirths);
 
         message.IsBodyHtml = true;
 

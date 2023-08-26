@@ -10,22 +10,24 @@ namespace SendEmailConsoleApp
     public EmailBuilder()
     {
     }
-    public string GetEmailContent(SweUser swePerson, TodaysEvent todaysEvent)
+    public string GetEmailContent(SweUser swePerson, TodaysEvent todaysEvent,
+    List<SweUser> moreSweBirths)
     {
       var date = Utils.GetCurrentDate();
 
       var formatedEventText = FormatText(todaysEvent.Extract);
       var secondFormatedEventText = FormatText(todaysEvent.SecondArticleExtract);
 
+      var formatedMoreSweBirths = FormatMoreSwePersons(moreSweBirths);
+
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
-
 
       return $@"
             <html>
               <body>
   
-                <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'>  
+                <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
                     
                     <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
                       Dagens händelse ägde rum <br>
@@ -64,11 +66,45 @@ namespace SendEmailConsoleApp
                   <p>{swePerson.Text}</p>
                   <img src='{swePerson.ImageUrl}'/>
                   <p>Läs mer om dagens födelseperson på: <a href='{swePerson.PageUrl}'>Wikipedia</a></p>
+
+
+                </div>
+                
+                <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
+
+                  <p style='color: red;'>NYHET!</p>
+                  <p style='color: white;'>Nu visas också:</p>
+                  <h3 style= 'color: {sweColorYellow}; padding: 0.2rem;' 
+                  >Fler svenskar födda {date}</h3>
+
+                </div>
+
+                <div style='border: 1px solid black; padding: 0.5rem;'>
                   
+                  <p>Sorterat enligt födesleår (äldst först)</p>
+
+                  {formatedMoreSweBirths}
+
                 </div>
               </body>
             </html>
             ";
+    }
+    public static string FormatMoreSwePersons(List<SweUser> moreSweBirths)
+    {
+      string formatedText = "";
+
+      foreach (var item in moreSweBirths)
+      {
+        formatedText += "<div>";
+
+        formatedText += $"<p> <a href='{item.PageUrl}'>{item.Name}</a>, {item.BirthYear}, {item.Heading} </p>";
+
+        formatedText += "</div>";
+
+      }
+
+      return formatedText;
     }
     public static string FormatText(string extract)
     {
