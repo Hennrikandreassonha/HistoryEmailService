@@ -19,7 +19,7 @@ while (true)
 
     string currentTime = Utils.GetCurrentTime(false, true);
 
-    if (currentTime == "7" &&
+    if (currentTime == "07" &&
     currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
