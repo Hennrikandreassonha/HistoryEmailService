@@ -19,7 +19,7 @@ while (true)
 
     string currentTime = Utils.GetCurrentTime(false, true);
 
-    if (currentTime == "07" &&
+    if (currentTime == "08" &&
     currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
@@ -71,12 +71,12 @@ while (true)
         //Egentligen ska man hämta från ett api men sidan är inte live.
         message.To.Add("henrik1995a@live.se");
         
-        // message.To.Add("Karin.eh@hotmail.se");
-        // message.To.Add("henrik.kjellberg46@gmail.com");
-        // message.To.Add("andreasson6300@gmail.com");
-        // message.To.Add("Richard.jurmo.berg@gmail.com");
-        // message.To.Add("Victor.kaka@hotmail.com");
-        // message.To.Add("matilda.herngren@outlook.com");
+        message.To.Add("Karin.eh@hotmail.se");
+        message.To.Add("henrik.kjellberg46@gmail.com");
+        message.To.Add("andreasson6300@gmail.com");
+        message.To.Add("Richard.jurmo.berg@gmail.com");
+        message.To.Add("Victor.kaka@hotmail.com");
+        message.To.Add("matilda.herngren@outlook.com");
 
 
         EmailBuilder emailBuilder = new();
