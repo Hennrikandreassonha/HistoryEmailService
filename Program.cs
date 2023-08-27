@@ -19,8 +19,8 @@ while (true)
 
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
-    //currentTime == "16" &&
-    if (
+    //
+    if (currentTime == "07" &&
     currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
@@ -80,13 +80,13 @@ while (true)
         //Egentligen ska man hämta från ett api men sidan är inte live.
         message.To.Add("henrik1995a@live.se");
 
-        // message.To.Add("Karin.eh@hotmail.se");
-        // message.To.Add("henrik.kjellberg46@gmail.com");
-        // message.To.Add("andreasson6300@gmail.com");
-        // message.To.Add("Richard.jurmo.berg@gmail.com");
-        // message.To.Add("Victor.kaka@hotmail.com");
-        // message.To.Add("matilda.herngren@outlook.com");
-        // message.To.Add("m.johansson92@hotmail.com");
+        message.To.Add("Karin.eh@hotmail.se");
+        message.To.Add("henrik.kjellberg46@gmail.com");
+        message.To.Add("andreasson6300@gmail.com");
+        message.To.Add("Richard.jurmo.berg@gmail.com");
+        message.To.Add("Victor.kaka@hotmail.com");
+        message.To.Add("matilda.herngren@outlook.com");
+        message.To.Add("m.johansson92@hotmail.com");
 
 
         EmailBuilder emailBuilder = new();

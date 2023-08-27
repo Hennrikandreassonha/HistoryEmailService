@@ -15,8 +15,9 @@ namespace SendEmailConsoleApp
     {
       var date = Utils.GetCurrentDate();
 
-      var formatedEventText = FormatText(todaysEvent.Extract);
-      var secondFormatedEventText = FormatText(todaysEvent.SecondArticleExtract);
+      var firstArtikleFormatedEventText = FormatText(todaysEvent.FirstArticleExtract.ToString());
+      var secondFormatedEventText = FormatText(todaysEvent.SecondArticleExtract.ToString());
+
 
       var formatedMoreSweBirths = FormatMoreSwePersons(moreSweBirths);
 
@@ -39,18 +40,22 @@ namespace SendEmailConsoleApp
                 <div style='border: 1px solid black; padding: 0.5rem;'>
                   
                   <h2>{todaysEvent.Heading}</h2>
-                  {formatedEventText}
-                  <img src='{todaysEvent.ImageUrl}'/>
-                  
-                  <p>Läs mer om dagens händelse på: <a href='{todaysEvent.PageUrl}'>Wikipedia</a></p>
 
                   <hr>
 
-                  <h2>Dagens relaterade artikel</h2>
+                  <h3>Artiklar relaterade till händelsen:</h3>
+                
+                  <h2>{todaysEvent.FirstArticleTitle}</h2>
+                  {firstArtikleFormatedEventText}
+                  <img src='{todaysEvent.FirstArticleImageUrl}'/>
+                  <p>Läs mer om artikel 1: <a href='{todaysEvent.FirstArticlePageUrl}'>Wikipedia</a></p>
+
+                  <hr>
+
                   <h2>{todaysEvent.SecondArticleTitle}</h2>
                   {secondFormatedEventText}
                   <img src='{todaysEvent.SecondArticleImageUrl}'/>
-                  <p>Läs mer om dagens relaterade artikel på: <a href='{todaysEvent.SecondArticlePageUrl}'>Wikipedia</a></p>
+                  <p>Läs mer om artikel 2: <a href='{todaysEvent.SecondArticlePageUrl}'>Wikipedia</a></p>
 
                 </div>
 

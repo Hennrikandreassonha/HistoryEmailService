@@ -24,21 +24,7 @@ namespace SendEmailConsoleApp
     //     public required string Name { get; set; }
     //     public required string WikiUrl { get; set; }
     // }
-    public class TodaysEvent
-    {
-        public string Heading { get; set; } = null!;
-        //The extract is the text
-        public string Extract { get; set; } = null!;
-        public string Year { get; set; } = null!;
-        public string ImageUrl { get; set; } = null!;
-        public string PageUrl { get; set; } = null!;
 
-        //A related article.
-        public string SecondArticleTitle { get; set; } = null!;
-        public string SecondArticleExtract { get; set; } = null!;
-        public string SecondArticleImageUrl { get; set; } = null!;
-        public string SecondArticlePageUrl { get; set; } = null!;
-    }
     public class WikiApi
     {
         private readonly HttpClient _httpClient;
@@ -167,7 +153,6 @@ namespace SendEmailConsoleApp
 
                     swePersons.Add(swePerson);
                 }
-
             }
             return swePersons;
         }
@@ -175,27 +160,22 @@ namespace SendEmailConsoleApp
         {
             //This doesnt have the desired extractlength.
             //It will be returned if no good is found.
-            TodaysEvent backupEvent = new TodaysEvent();
             TodaysEvent eventWithLength = new TodaysEvent();
 
             int currentHeadingLength = 0;
 
             foreach (var item in eventList)
             {
-
                 // int test = item.pages[0].extract.Length;
                 int pageCount = item.pages.Count;
 
-                string extractLength = item.pages[0].extract;
-                int extractLengthInt = extractLength.Length;
-                // Performing a check in case imageUrls are null, as we require an image in the email.
-
+                string headingText = item.text;
+                int headingLength = headingText.Length;
 
                 var picNumbOne = item.pages[0].thumbnail;
                 // string? picNumbOne = item.pages[0].thumbnail?.source;
 
                 string? picNumbTwo = item.pages.Count > 1 ? item.pages[1]?.thumbnail?.source : null;
-
 
                 if (picNumbOne == null || picNumbTwo == null)
                 {
@@ -203,55 +183,31 @@ namespace SendEmailConsoleApp
                 }
                 picNumbOne = item.pages[0].thumbnail.source;
 
-                //Each even has an amount of pages. Every page is a related article.
-
-
-                foreach (dynamic? page in item.pages)
+                //Om nuvarande artikel är längre än den vi redan sparat och
+                //Så ska den sparas istället
+                if (currentHeadingLength < headingLength)
                 {
-                    //Om nuvarande artikel är längre än den vi redan sparat och
-                    //Så ska den sparas istället
-                    if (page == null || pageCount >= 2 || currentHeadingLength
-                    < page.item.text.Length)
-                    {
-                        //Heading length måste vara lång
-                        //We want the longest text possible.
-                        //Makes it more interesting
-                        currentHeadingLength = item.text.Length;
+                    //Heading length måste vara lång
+                    //We want the longest text possible.
+                    //Makes it more interesting
+                    string pageHeading = item.text;
+                    currentHeadingLength = pageHeading.Length;
 
-                        eventWithLength.Heading = item.text;
+                    eventWithLength.Heading = item.text;
+                    eventWithLength.Year = item.year;
 
-                        eventWithLength.Extract = item.pages[0].extract;
-                        eventWithLength.Year = item.year;
-                        eventWithLength.ImageUrl = item.pages[0].thumbnail.source;
-                        eventWithLength.PageUrl = item.pages[0].content_urls.desktop.page;
+                    eventWithLength.FirstArticleTitle = NormalizeString(item.pages[0].title.ToString());
+                    eventWithLength.FirstArticleExtract = item.pages[0].extract;
+                    eventWithLength.FirstArticleImageUrl = item.pages[0].thumbnail.source;
+                    eventWithLength.FirstArticlePageUrl = item.pages[0].content_urls.desktop.page;
 
-                        string testTitle = item.pages[1].title;
-
-                        eventWithLength.SecondArticleTitle = NormalizeString(testTitle);
-                        eventWithLength.SecondArticleExtract = item.pages[1].extract;
-                        eventWithLength.SecondArticleImageUrl = item.pages[1].thumbnail.source;
-                        eventWithLength.SecondArticlePageUrl = item.pages[1].content_urls.desktop.page;
-
-                        // An article of sufficient length will be prioritized and returned immediately.
-                        return eventWithLength;
-                    }
-
-                    else if (item == null)
-                    {
-
-                        backupEvent.Heading = item.text;
-                        backupEvent.Extract = item.pages[0].extract;
-                        backupEvent.ImageUrl = item.pages[0].thumbnail.source;
-                        backupEvent.PageUrl = item.pages[0].content_urls.desktop.page;
-
-                        backupEvent.SecondArticleTitle = NormalizeString(item.pages[1].title);
-                        backupEvent.SecondArticleExtract = item.pages[1].extract;
-                        backupEvent.SecondArticleImageUrl = item.pages[1].thumbnail.source;
-                        backupEvent.SecondArticlePageUrl = item.pages[1].content_urls.desktop.page;
-                    }
+                    eventWithLength.SecondArticleTitle = NormalizeString(item.pages[1].title.ToString());
+                    eventWithLength.SecondArticleExtract = item.pages[1].extract;
+                    eventWithLength.SecondArticleImageUrl = item.pages[1].thumbnail.source;
+                    eventWithLength.SecondArticlePageUrl = item.pages[1].content_urls.desktop.page;
                 }
             }
-            return backupEvent;
+            return eventWithLength;
         }
         public int GetRandomIndex(int listLength)
         {
