@@ -178,6 +178,8 @@ namespace SendEmailConsoleApp
             TodaysEvent backupEvent = new TodaysEvent();
             TodaysEvent eventWithLength = new TodaysEvent();
 
+            int currentHeadingLength = 0;
+
             foreach (var item in eventList)
             {
 
@@ -202,13 +204,22 @@ namespace SendEmailConsoleApp
                 picNumbOne = item.pages[0].thumbnail.source;
 
                 //Each even has an amount of pages. Every page is a related article.
+
+
                 foreach (dynamic? page in item.pages)
                 {
                     //Om nuvarande artikel är längre än den vi redan sparat och
                     //Så ska den sparas istället
-                    if (page == null || pageCount >= 2 && extractLengthInt >300)
+                    if (page == null || pageCount >= 2 || currentHeadingLength
+                    < page.item.text.Length)
                     {
+                        //Heading length måste vara lång
+                        //We want the longest text possible.
+                        //Makes it more interesting
+                        currentHeadingLength = item.text.Length;
+
                         eventWithLength.Heading = item.text;
+
                         eventWithLength.Extract = item.pages[0].extract;
                         eventWithLength.Year = item.year;
                         eventWithLength.ImageUrl = item.pages[0].thumbnail.source;
@@ -232,9 +243,6 @@ namespace SendEmailConsoleApp
                         backupEvent.Extract = item.pages[0].extract;
                         backupEvent.ImageUrl = item.pages[0].thumbnail.source;
                         backupEvent.PageUrl = item.pages[0].content_urls.desktop.page;
-
-                        string testTitle = item.pages[1].title;
-                        var normalized = NormalizeString(testTitle);
 
                         backupEvent.SecondArticleTitle = NormalizeString(item.pages[1].title);
                         backupEvent.SecondArticleExtract = item.pages[1].extract;

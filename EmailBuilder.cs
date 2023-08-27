@@ -31,7 +31,7 @@ namespace SendEmailConsoleApp
                     
                     <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
                       Dagens händelse ägde rum <br>
-                       {date} - {todaysEvent.Year}.
+                       <span style='color:red;'>{date} - {todaysEvent.Year}</span>.
                     </h1>
 
                 </div>
