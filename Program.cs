@@ -20,7 +20,7 @@ while (true)
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
     
-    if (currentTime == "07" &&
+    if (currentTime == "15" &&
     currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
@@ -86,6 +86,8 @@ while (true)
         message.To.Add("Richard.jurmo.berg@gmail.com");
         message.To.Add("Victor.kaka@hotmail.com");
         message.To.Add("matilda.herngren@outlook.com");
+        message.To.Add("m.johansson92@hotmail.com");
+
 
         EmailBuilder emailBuilder = new();
         message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent, moreSweBirths);

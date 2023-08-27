@@ -204,8 +204,9 @@ namespace SendEmailConsoleApp
                 //Each even has an amount of pages. Every page is a related article.
                 foreach (dynamic? page in item.pages)
                 {
-
-                    if (page == null || pageCount >= 2 && extractLengthInt > 500)
+                    //Om nuvarande artikel är längre än den vi redan sparat och
+                    //Så ska den sparas istället
+                    if (page == null || pageCount >= 2 && extractLengthInt >300)
                     {
                         eventWithLength.Heading = item.text;
                         eventWithLength.Extract = item.pages[0].extract;
