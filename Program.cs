@@ -20,7 +20,7 @@ while (true)
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
     //
-    if (currentTime == "07" &&
+    if (currentTime == "09" &&
     currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
@@ -60,34 +60,23 @@ while (true)
         };
 
         //Getting the subscribed users from WebsiteApi.
+        //Site isnt live i get it from document instead.
         DagensSverigeApi sverigeApi = new DagensSverigeApi(wikiApiClient);
 
-        // var subscribedEmails = sverigeApi.GetSubscribers();
+        var emails = EmailReader.getEmails();
 
-        //Adding to emaillist.
-        // foreach (var emails in subscribedEmails)
-        // {
-        //     try
-        //     {
-        //         message.To.Add(emails);
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         Console.WriteLine(e);
-        //     }
-        // }
-
-        //Egentligen ska man hämta från ett api men sidan är inte live.
-        message.To.Add("henrik1995a@live.se");
-
-        message.To.Add("Karin.eh@hotmail.se");
-        message.To.Add("henrik.kjellberg46@gmail.com");
-        message.To.Add("andreasson6300@gmail.com");
-        message.To.Add("Richard.jurmo.berg@gmail.com");
-        message.To.Add("Victor.kaka@hotmail.com");
-        message.To.Add("matilda.herngren@outlook.com");
-        message.To.Add("m.johansson92@hotmail.com");
-
+        foreach (var email in emails)
+        {
+            try
+            {
+                Console.WriteLine(email);
+                message.To.Add(email);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
+        }
 
         EmailBuilder emailBuilder = new();
         message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent, moreSweBirths);
