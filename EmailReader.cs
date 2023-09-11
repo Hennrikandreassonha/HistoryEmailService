@@ -14,6 +14,7 @@ namespace SendEmailConsoleApp
         {
             var emails = File.ReadAllLines("../emailsHistoryService.txt");
 
+            
             return emails.Where(x => x != "" || x != " ").ToArray();
         }
     }
