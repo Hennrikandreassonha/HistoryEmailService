@@ -60,11 +60,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+      "projectUniqueName": "c:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
       "projectName": "SendEmailConsoleApp",
-      "projectPath": "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+      "projectPath": "c:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
       "packagesPath": "C:\\Users\\Dator\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\obj\\",
+      "outputPath": "c:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -114,7 +114,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.302\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.401\\RuntimeIdentifierGraph.json"
       }
     }
   }

@@ -12,7 +12,7 @@ namespace SendEmailConsoleApp
 
         public static string[] getEmails()
         {
-            var emails = File.ReadAllLines("../emailsHistoryService.txt");
+            var emails = File.ReadAllLines("../emailsHistoryService_All.txt");
 
             
             return emails.Where(x => x != "" || x != " ").ToArray();
