@@ -20,7 +20,7 @@ while (true)
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
     //
-    if (currentTime == "15" &&
+    if (currentTime == "07" &&
     currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
