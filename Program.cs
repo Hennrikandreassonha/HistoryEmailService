@@ -18,7 +18,7 @@ Scraper scraper = new()
     Url = "https://www.so-rummet.se/aret-runt"
 };
 
-await scraper.Scrape();
+scraper.Scrape();
 
 
 while (true)

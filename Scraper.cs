@@ -12,13 +12,13 @@ namespace SendEmailConsoleApp
         public required string Url { get; set; }
         public string? Header { get; set; }
         public string? Text { get; set; }
-        public string? Picture { get; set; }
+        public string? PictureUrl { get; set; }
         public string? PictureText { get; set; }
 
         public Scraper()
         {
         }
-        public async Task<string> Scrape()
+        public async void Scrape()
         {
             var httpClient = new HttpClient();
 
@@ -27,30 +27,38 @@ namespace SendEmailConsoleApp
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(html);
 
-            var divInfo = htmlDocument.DocumentNode.Descendants("div").
+            var divInfo = GetTextDiv(htmlDocument);
+            var picDiv = GetPicDiv(htmlDocument);
+
+//$"https://www.so-rummet.se/
+            if (divInfo != null && picDiv != null)
+            {
+                try
+                {
+                    this.Header = divInfo.Descendants("a").FirstOrDefault()!.InnerText;
+                    this.Text = divInfo.Descendants("p").ToList()[1]!.InnerText;
+
+                    this.PictureUrl = $"https://www.so-rummet.se/{picDiv.Descendants("img").FirstOrDefault()!.GetAttributeValue("src", "")}";
+
+                    this.PictureText = picDiv.Descendants("p").FirstOrDefault()!.InnerText;
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("Err making scraperobject: ", e.Message);
+                }
+            }
+        }
+        private static HtmlNode? GetTextDiv(HtmlDocument htmlDocument)
+        {
+            return htmlDocument.DocumentNode.Descendants("div").
             Where(x => x.GetAttributeValue("class", "").
             Contains("media-body")).FirstOrDefault();
-
-            var picDiv = htmlDocument.DocumentNode.Descendants("div").
+        }
+        private static HtmlNode? GetPicDiv(HtmlDocument htmlDocument)
+        {
+            return htmlDocument.DocumentNode.Descendants("div").
             Where(x => x.GetAttributeValue("class", "").
             Contains("media-year-round")).FirstOrDefault();
-
-            Console.WriteLine(divInfo);
-            var picture = picDiv!.Descendants("img").FirstOrDefault();
-            string srcValue = picture.GetAttributeValue("src", "");
-
-            if (divInfo != null)
-            {
-
-                this.Header = divInfo.Descendants("a").FirstOrDefault()!.InnerText;
-                this.Text = divInfo.Descendants("p").ToList()[1]!.InnerText;
-                //Fixa
-
-                // var pictureText = 
-            }
-
-
-            return "divInfo";
         }
     }
 }
