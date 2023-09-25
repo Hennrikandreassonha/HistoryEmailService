@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj": {}
+    "c:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj": {
+    "c:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+        "projectUniqueName": "c:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
         "projectName": "SendEmailConsoleApp",
-        "projectPath": "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+        "projectPath": "c:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
         "packagesPath": "C:\\Users\\Dator\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\obj\\",
+        "outputPath": "c:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Dator\\AppData\\Roaming\\NuGet\\NuGet.Config",
@@ -40,6 +40,10 @@
         "net7.0": {
           "targetAlias": "net7.0",
           "dependencies": {
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.11.53, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.3, )"

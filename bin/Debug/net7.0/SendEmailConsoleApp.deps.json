@@ -8,10 +8,19 @@
     ".NETCoreApp,Version=v7.0": {
       "SendEmailConsoleApp/1.0.0": {
         "dependencies": {
+          "HtmlAgilityPack": "1.11.53",
           "Newtonsoft.Json": "13.0.3"
         },
         "runtime": {
           "SendEmailConsoleApp.dll": {}
+        }
+      },
+      "HtmlAgilityPack/1.11.53": {
+        "runtime": {
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {
+            "assemblyVersion": "1.11.53.0",
+            "fileVersion": "1.11.53.0"
+          }
         }
       },
       "Newtonsoft.Json/13.0.3": {
@@ -29,6 +38,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "HtmlAgilityPack/1.11.53": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-FeBqVmrMVoKFcsg6BhMJ5FYSx476AKDic9oHk5DsYSj606agR1XuxaaicxJ28X/LZkPTX51e3NaB8QJ5G+1B/w==",
+      "path": "htmlagilitypack/1.11.53",
+      "hashPath": "htmlagilitypack.1.11.53.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.3": {
       "type": "package",

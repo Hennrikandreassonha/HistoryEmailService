@@ -13,6 +13,14 @@ WikiApi wikiApi = new WikiApi(wikiApiClient);
 
 string currentDay = "";
 
+Scraper scraper = new()
+{
+    Url = "https://www.so-rummet.se/aret-runt"
+};
+
+await scraper.Scrape();
+
+
 while (true)
 {
     Console.WriteLine("I loop");
