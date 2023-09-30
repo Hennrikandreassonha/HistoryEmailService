@@ -13,13 +13,7 @@ WikiApi wikiApi = new WikiApi(wikiApiClient);
 
 string currentDay = "";
 
-Scraper scraper = new()
-{
-    Url = "https://www.so-rummet.se/aret-runt"
-};
-
-scraper.Scrape();
-
+Console.WriteLine("ss");
 
 while (true)
 {
@@ -28,8 +22,7 @@ while (true)
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
     //
-    if (currentTime == "07" &&
-    currentDay != Utils.GetCurrentDate())
+    if (currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
 
@@ -51,6 +44,14 @@ while (true)
         //Handling the event of the day
         var allEvents = response.selected;
         TodaysEvent todaysEvent = wikiApi.GetEvent(allEvents);
+
+        //Getting todaysarticle from Webscraper
+        ScraperObject scraperObject = new()
+        {
+            Url = "https://www.so-rummet.se/aret-runt"
+        };
+
+        await scraperObject.ScrapeAsync();
 
         MailMessage message = new MailMessage();
 
@@ -96,7 +97,7 @@ while (true)
         }
 
         EmailBuilder emailBuilder = new();
-        message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent, moreSweBirths);
+        message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent, moreSweBirths, scraperObject);
 
         message.IsBodyHtml = true;
 

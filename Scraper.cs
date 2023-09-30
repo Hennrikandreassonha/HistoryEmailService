@@ -7,7 +7,7 @@ using HtmlAgilityPack;
 
 namespace SendEmailConsoleApp
 {
-    public class Scraper
+    public class ScraperObject
     {
         public required string Url { get; set; }
         public string? Header { get; set; }
@@ -15,10 +15,10 @@ namespace SendEmailConsoleApp
         public string? PictureUrl { get; set; }
         public string? PictureText { get; set; }
 
-        public Scraper()
+        public ScraperObject()
         {
         }
-        public async void Scrape()
+        public async Task ScrapeAsync()
         {
             var httpClient = new HttpClient();
 
@@ -30,17 +30,17 @@ namespace SendEmailConsoleApp
             var divInfo = GetTextDiv(htmlDocument);
             var picDiv = GetPicDiv(htmlDocument);
 
-//$"https://www.so-rummet.se/
             if (divInfo != null && picDiv != null)
             {
                 try
                 {
                     this.Header = divInfo.Descendants("a").FirstOrDefault()!.InnerText;
-                    this.Text = divInfo.Descendants("p").ToList()[1]!.InnerText;
+                    Text = divInfo.Descendants("p").ToList()[1]!.InnerText;
 
-                    this.PictureUrl = $"https://www.so-rummet.se/{picDiv.Descendants("img").FirstOrDefault()!.GetAttributeValue("src", "")}";
+                    PictureUrl = $"https://www.so-rummet.se/{picDiv.Descendants("img").FirstOrDefault()!.GetAttributeValue("src", "")}";
 
-                    this.PictureText = picDiv.Descendants("p").FirstOrDefault()!.InnerText;
+                    PictureText = picDiv.Descendants("p").FirstOrDefault()!.InnerText;
+                    Console.WriteLine("jas");
                 }
                 catch (Exception e)
                 {

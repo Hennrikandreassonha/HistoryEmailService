@@ -11,15 +11,16 @@ namespace SendEmailConsoleApp
     {
     }
     public string GetEmailContent(SweUser swePerson, TodaysEvent todaysEvent,
-    List<SweUser> moreSweBirths)
+    List<SweUser> moreSweBirths, ScraperObject scaperObject)
     {
       var date = Utils.GetCurrentDate();
 
       var firstArtikleFormatedEventText = FormatText(todaysEvent.FirstArticleExtract.ToString());
       var secondFormatedEventText = FormatText(todaysEvent.SecondArticleExtract.ToString());
-
+      var formatedHeading = FormatText(todaysEvent.Heading);
 
       var formatedMoreSweBirths = FormatMoreSwePersons(moreSweBirths);
+      var formatedPersonText = FormatText(swePerson.Text);
 
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
@@ -27,19 +28,30 @@ namespace SendEmailConsoleApp
       return $@"
             <html>
               <body>
-  
+
+                <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
+                    <p style='color: red; font-weight: bolder;'><u>!NYHET!<u></p>
+                    <p style='color: white;'>Nu visas <i>ytterliggare</i> en händelse!</p>
+
+                    <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
+                      {scaperObject.Header} <br>
+                       <p style= 'padding: 0.5rem; margin: 0px;'>{date} - {todaysEvent.Year}.</p>
+                    </h1>
+
+                </div>
+
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
                     
                     <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
                       Dagens händelse ägde rum <br>
-                       <span style='color:red;'>{date} - {todaysEvent.Year}</span>.
+                       <p style= 'padding: 0.5rem; margin: 0px;'>{date} - {todaysEvent.Year}.</p>
                     </h1>
 
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
                   
-                  <h2>{todaysEvent.Heading}</h2>
+                  <h2 style='font-weight: bold;'>{formatedHeading}</h2>
 
                   <hr>
 
@@ -52,7 +64,7 @@ namespace SendEmailConsoleApp
 
                   <hr>
 
-                  <h2>{todaysEvent.SecondArticleTitle}</h2>
+                  <h2 style='font-weight: bold;'>{todaysEvent.SecondArticleTitle}</h2>
                   {secondFormatedEventText}
                   <img src='{todaysEvent.SecondArticleImageUrl}'/>
                   <p>Läs mer om artikel 2: <a href='{todaysEvent.SecondArticlePageUrl}'>Wikipedia</a></p>
@@ -68,7 +80,7 @@ namespace SendEmailConsoleApp
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
             
-                  <p>{swePerson.Text}</p>
+                  <p>{formatedPersonText}</p>
                   <img src='{swePerson.ImageUrl}'/>
                   <p>Läs mer om dagens födelseperson på: <a href='{swePerson.PageUrl}'>Wikipedia</a></p>
 
@@ -77,8 +89,6 @@ namespace SendEmailConsoleApp
                 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
 
-                  <p style='color: red;'>NYHET!</p>
-                  <p style='color: white;'>Nu visas också:</p>
                   <h3 style= 'color: {sweColorYellow}; padding: 0.2rem;' 
                   >Fler svenskar födda {date}</h3>
 
@@ -123,8 +133,8 @@ namespace SendEmailConsoleApp
       for (int i = 0; i < splittedText.Length; i++)
       {
 
-        if (i % 3 == 0)
-          formatedText += $@"</p> <p>";
+
+        formatedText += $@"</p> <p>";
 
         if (splittedText[i] != "")
           formatedText += $"{splittedText[i]}.";
