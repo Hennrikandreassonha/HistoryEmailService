@@ -22,6 +22,8 @@ namespace SendEmailConsoleApp
       var formatedMoreSweBirths = FormatMoreSwePersons(moreSweBirths);
       var formatedPersonText = FormatText(swePerson.Text);
 
+      var formatedScrapertext = FormatText(scaperObject.Text!);
+
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
 
@@ -29,15 +31,20 @@ namespace SendEmailConsoleApp
             <html>
               <body>
 
-                <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
-                    <p style='color: red; font-weight: bolder;'><u>!NYHET!<u></p>
-                    <p style='color: white;'>Nu visas <i>ytterliggare</i> en händelse!</p>
+                <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;''> 
+                    <span style='color: red; font-weight: bolder;'><u>!NYHET!</u></span>
+                    <spam style='color: white;'>Nu visas <i>ytterliggare</i> en händelse!</spam>
 
                     <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
                       {scaperObject.Header} <br>
-                       <p style= 'padding: 0.5rem; margin: 0px;'>{date} - {todaysEvent.Year}.</p>
                     </h1>
 
+                </div>
+
+                <div style='border: 1px solid black; padding: 0.5rem;'>
+                  {formatedScrapertext}
+                  <img src='{scaperObject.PictureUrl}'/>
+                  {scaperObject.PictureText}
                 </div>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 

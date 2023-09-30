@@ -13,8 +13,6 @@ WikiApi wikiApi = new WikiApi(wikiApiClient);
 
 string currentDay = "";
 
-Console.WriteLine("ss");
-
 while (true)
 {
     Console.WriteLine("I loop");
