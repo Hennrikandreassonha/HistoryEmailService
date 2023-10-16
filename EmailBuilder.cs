@@ -22,7 +22,7 @@ namespace SendEmailConsoleApp
       var formatedMoreSweBirths = FormatMoreSwePersons(moreSweBirths);
       var formatedPersonText = FormatText(swePerson.Text);
 
-      var formatedScrapertext = FormatText(scaperObject.Text!);
+      // var formatedScrapertext = FormatText(scaperObject.Text!);
 
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
@@ -42,7 +42,7 @@ namespace SendEmailConsoleApp
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
-                  {formatedScrapertext}
+                  {scaperObject.Text}
                   <img src='{scaperObject.PictureUrl}'/>
                   {scaperObject.PictureText}
                 </div>
@@ -58,14 +58,14 @@ namespace SendEmailConsoleApp
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
                   
-                  <h2 style='font-weight: bold;'>{formatedHeading}</h2>
+                  <p>{formatedHeading}</p>
 
                   <hr>
 
                   <h3>Artiklar relaterade till händelsen:</h3>
                 
                   <h2>{todaysEvent.FirstArticleTitle}</h2>
-                  {firstArtikleFormatedEventText}
+                  <p>{firstArtikleFormatedEventText}</p>
                   <img src='{todaysEvent.FirstArticleImageUrl}'/>
                   <p>Läs mer om artikel 1: <a href='{todaysEvent.FirstArticlePageUrl}'>Wikipedia</a></p>
 

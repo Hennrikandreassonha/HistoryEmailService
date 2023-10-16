@@ -61,16 +61,13 @@ namespace SendEmailConsoleApp
 
         public dynamic? GetBirths(dynamic apiResponse)
         {
+            if (apiResponse == null)
+            {
+                return null;
+            }
             dynamic? births = null;
-            try
-            {
-                births = apiResponse.births;
-            }
-             catch (Exception e)
-            {
-                // Handle the exception, e.g., log it or take corrective action.
-                Console.WriteLine(e);
-            }
+
+            births = apiResponse.births;
 
             return births;
         }

@@ -35,7 +35,10 @@ namespace SendEmailConsoleApp
                 try
                 {
                     this.Header = divInfo.Descendants("a").FirstOrDefault()!.InnerText;
-                    Text = divInfo.Descendants("p").ToList()[1]!.InnerText;
+                    //Göra en loop här så vi får alla 
+                    // Text = divInfo.Descendants("p").ToList()[1]!.InnerText;
+
+                    Text = GetAllParagrafs(divInfo);
 
                     PictureUrl = $"https://www.so-rummet.se/{picDiv.Descendants("img").FirstOrDefault()!.GetAttributeValue("src", "")}";
 
@@ -47,6 +50,24 @@ namespace SendEmailConsoleApp
                     Console.WriteLine("Err making scraperobject: ", e.Message);
                 }
             }
+        }
+        public static string GetAllParagrafs(HtmlNode divInfo){
+
+            var stringToReturn = "";
+            var allParagrafs = divInfo.Descendants("p").ToList();
+
+            foreach (var item in allParagrafs)
+            {
+                if(item.InnerText == ""){
+                    continue;
+                }
+
+                stringToReturn += "<p>";
+                stringToReturn += item.InnerHtml;
+                stringToReturn += "</p>";
+            }
+
+            return stringToReturn;
         }
         private static HtmlNode? GetTextDiv(HtmlDocument htmlDocument)
         {

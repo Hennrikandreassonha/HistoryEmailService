@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "dJQL4+6UcpnWCAj0KmCICTum7DSAi2qRLK3SxIJOO7L41SGxE3dYvO975SjyvjUKLpAhs5YmMidlkTKPhrJW9w==",
+  "dgSpecHash": "UB61VuUHZ7AbAS8xm9Mkmn4CfnvLSNrAjMTcykWLefrLS1RUzOqVC52Kb8xUDzRKpwxt3K+HDYghEFWL/UGbpQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Dator\\Документы\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+  "projectFilePath": "C:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dator\\.nuget\\packages\\htmlagilitypack\\1.11.53\\htmlagilitypack.1.11.53.nupkg.sha512",
     "C:\\Users\\Dator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"

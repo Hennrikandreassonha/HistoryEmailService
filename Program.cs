@@ -19,8 +19,9 @@ while (true)
 
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
-    //
-    if (currentTime == "07" && currentDay != Utils.GetCurrentDate())
+
+    //currentTime == "07" && currentDay != Utils.GetCurrentDate()
+    if (true)
     {
         Console.WriteLine("Skickar mail");
 
@@ -28,6 +29,11 @@ while (true)
 
         //Handling the swe birthday person.
         var allBirths = wikiApi.GetBirths(response);
+
+        if (allBirths == null)
+        {
+            continue;
+        }
 
         List<SweUser> sweBirths = wikiApi.GetSwePersons(allBirths);
         var swePerson = sweBirths.OrderByDescending(x => x.Text.Length).FirstOrDefault();
@@ -104,5 +110,5 @@ while (true)
         currentDay = Utils.GetCurrentDate();
     }
 
-    Thread.Sleep(5000);
+    Thread.Sleep(1000);
 }
