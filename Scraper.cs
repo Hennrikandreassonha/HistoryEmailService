@@ -35,9 +35,6 @@ namespace SendEmailConsoleApp
                 try
                 {
                     this.Header = divInfo.Descendants("a").FirstOrDefault()!.InnerText;
-                    //Göra en loop här så vi får alla 
-                    // Text = divInfo.Descendants("p").ToList()[1]!.InnerText;
-
                     Text = GetAllParagrafs(divInfo);
 
                     PictureUrl = $"https://www.so-rummet.se/{picDiv.Descendants("img").FirstOrDefault()!.GetAttributeValue("src", "")}";
@@ -63,7 +60,7 @@ namespace SendEmailConsoleApp
                 }
 
                 stringToReturn += "<p>";
-                stringToReturn += item.InnerHtml;
+                stringToReturn += item.InnerText;
                 stringToReturn += "</p>";
             }
 
