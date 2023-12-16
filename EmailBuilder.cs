@@ -27,18 +27,17 @@ namespace SendEmailConsoleApp
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
 
+      //<h3 style='color: red;'>Passar bra o skriva meddelanden i </h3>
+
       return $@"
             <html>
               <body>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;''> 
-                    <span style='color: red; font-weight: bolder;'><u>!NYHET!</u></span>
-                    <spam style='color: white;'>Nu visas <i>ytterliggare</i> en händelse!</spam>
 
                     <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
                       {scaperObject.Header} <br>
                     </h1>
-
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
