@@ -29,5 +29,13 @@ namespace SendEmailConsoleApp
             }
             return currentTime.ToString("HH:mm");
         }
+        public static void AddToErrorlog(string text)
+        {
+            string errorPath = @"./Errorlogs.txt";
+
+            var dateNow = DateTime.Now;
+
+            File.AppendAllText(errorPath, $"Error occured: {dateNow} Error: {text} {Environment.NewLine}");
+        }
     }
 }

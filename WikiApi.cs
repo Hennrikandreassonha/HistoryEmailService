@@ -12,12 +12,16 @@ namespace SendEmailConsoleApp
 {
     public class SweUser
     {
-        public required string Name { get; set; }
-        public required string Heading { get; set; }
-        public required string Text { get; set; }
-        public required string BirthYear { get; set; }
-        public required string ImageUrl { get; set; }
-        public required string PageUrl { get; set; }
+        public SweUser()
+        {
+
+        }
+        public string Name { get; set; }
+        public string Heading { get; set; }
+        public string Text { get; set; }
+        public string BirthYear { get; set; }
+        public string ImageUrl { get; set; }
+        public string PageUrl { get; set; }
     }
     // public class WikiPerson
     // {
@@ -65,10 +69,8 @@ namespace SendEmailConsoleApp
             {
                 return null;
             }
-            dynamic? births = null;
 
-            births = apiResponse.births;
-
+            dynamic births = apiResponse.births;
             return births;
         }
         public List<SweUser> GetSwePersons(dynamic? personList)
@@ -79,39 +81,42 @@ namespace SendEmailConsoleApp
             {
                 string personTextControl = person.text;
 
-                int personPagesCount = person.pages.Count;
-
-                if (personTextControl.Contains("svensk", StringComparison.OrdinalIgnoreCase) &&
+                if (personTextControl.Contains("svensk", StringComparison.OrdinalIgnoreCase) && person.pages.Count != null &&
                 person.pages.Count != 0)
                 {
-                    string[] personSplitted = personTextControl.Split(',');
+                    SweUser swePerson = new SweUser();
 
-                    string personHeading = "";
-                    for (int index = 1; index < personSplitted.Length; index++)
+                    try
                     {
-                        personHeading += personSplitted[index];
+                        string[] personSplitted = personTextControl.Split(',');
+
+                        string personHeading = "";
+                        for (int index = 1; index < personSplitted.Length; index++)
+                        {
+                            personHeading += personSplitted[index];
+                        }
+
+                        personHeading = personHeading.TrimStart();
+                        personHeading = CapitalizeFirstLetter(personHeading);
+                        string personText = person.pages[0].extract;
+                        string personUrl = person.pages[0].content_urls.desktop.page;
+
+                        swePerson.Name = personSplitted[0];
+                        swePerson.Heading = personHeading;
+                        swePerson.Text = personText;
+                        swePerson.BirthYear = person.year;
+                        swePerson.PageUrl = personUrl;
+                        swePerson.ImageUrl = "";
+
+                        if (person.pages[0]?.thumbnail?.source != null)
+                        {
+                            swePerson.ImageUrl = person.pages[0].thumbnail.source;
+                        }
+
                     }
-
-                    personHeading = personHeading.TrimStart();
-                    personHeading = CapitalizeFirstLetter(personHeading);
-                    string personText = person.pages[0].extract;
-                    string personUrl = person.pages[0].content_urls.desktop.page;
-
-                    Console.WriteLine(personUrl);
-
-                    SweUser swePerson = new SweUser()
+                    catch (Exception e)
                     {
-                        Name = personSplitted[0],
-                        Heading = personHeading,
-                        Text = personText,
-                        BirthYear = person.year,
-                        PageUrl = personUrl,
-                        ImageUrl = ""
-                    };
-
-                    if (person.pages[0]?.thumbnail?.source != null)
-                    {
-                        swePerson.ImageUrl = person.pages[0].thumbnail.source;
+                        Utils.AddToErrorlog(e.Message);
                     }
 
                     if (!PersonHasBoringBirthDate(swePerson) && swePerson.ImageUrl != "")
@@ -129,35 +134,38 @@ namespace SendEmailConsoleApp
             {
                 string personTextControl = person.text;
 
-                int personPagesCount = person.pages.Count;
-
-                if (personTextControl.Contains("svensk", StringComparison.OrdinalIgnoreCase) &&
-                person.pages.Count != 0)
+                if (personTextControl.Contains("svensk", StringComparison.OrdinalIgnoreCase) && person.pages.Count != null && person.pages.Count != 0)
                 {
-                    string[] personSplitted = personTextControl.Split(',');
 
-                    string personHeading = "";
-                    for (int index = 1; index < personSplitted.Length; index++)
+                    SweUser swePerson = new SweUser();
+                    try
                     {
-                        personHeading += personSplitted[index];
+                        string[] personSplitted = personTextControl.Split(',');
+
+                        string personHeading = "";
+                        for (int index = 1; index < personSplitted.Length; index++)
+                        {
+                            personHeading += personSplitted[index];
+                        }
+
+                        personHeading = personHeading.TrimStart();
+                        personHeading = CapitalizeFirstLetter(personHeading);
+                        string personText = person.pages[0].extract;
+                        string personUrl = person.pages[0].content_urls.desktop.page;
+
+
+                        swePerson.Name = personSplitted[0];
+                        swePerson.Heading = personHeading;
+                        swePerson.Text = personText;
+                        swePerson.BirthYear = person.year;
+                        swePerson.PageUrl = personUrl;
+                        swePerson.ImageUrl = "";
+
                     }
-
-                    personHeading = personHeading.TrimStart();
-                    personHeading = CapitalizeFirstLetter(personHeading);
-                    string personText = person.pages[0].extract;
-                    string personUrl = person.pages[0].content_urls.desktop.page;
-
-                    Console.WriteLine(personUrl);
-
-                    SweUser swePerson = new SweUser()
+                    catch (Exception e)
                     {
-                        Name = personSplitted[0],
-                        Heading = personHeading,
-                        Text = personText,
-                        BirthYear = person.year,
-                        PageUrl = personUrl,
-                        ImageUrl = ""
-                    };
+                        Utils.AddToErrorlog(e.Message);
+                    }
 
                     swePersons.Add(swePerson);
                 }
@@ -174,46 +182,54 @@ namespace SendEmailConsoleApp
 
             foreach (var item in eventList)
             {
-                // int test = item.pages[0].extract.Length;
-                int pageCount = item.pages.Count;
-
-                string headingText = item.text;
-                int headingLength = headingText.Length;
-
-                var picNumbOne = item.pages[0].thumbnail;
-                // string? picNumbOne = item.pages[0].thumbnail?.source;
-
-                string? picNumbTwo = item.pages.Count > 1 ? item.pages[1]?.thumbnail?.source : null;
-
-                if (picNumbOne == null || picNumbTwo == null)
+                try
                 {
-                    continue;
-                }
-                picNumbOne = item.pages[0].thumbnail.source;
+                    int pageCount = item.pages.Count;
 
-                //Om nuvarande artikel är längre än den vi redan sparat och
-                //Så ska den sparas istället
-                if (currentHeadingLength < headingLength)
+                    string headingText = item.text;
+                    int headingLength = headingText.Length;
+
+                    var picNumbOne = item.pages[0].thumbnail;
+                    // string? picNumbOne = item.pages[0].thumbnail?.source;
+
+                    string? picNumbTwo = item.pages.Count > 1 ? item.pages[1]?.thumbnail?.source : null;
+
+                    if (picNumbOne == null || picNumbTwo == null)
+                    {
+                        continue;
+                    }
+                    picNumbOne = item.pages[0].thumbnail.source;
+
+                    //Om nuvarande artikel är längre än den vi redan sparat och
+                    //Så ska den sparas istället
+                    if (currentHeadingLength < headingLength)
+                    {
+                        //Heading length måste vara lång
+                        //We want the longest text possible.
+                        //Makes it more interesting
+                        string pageHeading = item.text;
+                        currentHeadingLength = pageHeading.Length;
+
+                        eventWithLength.Heading = item.text;
+                        eventWithLength.Year = item.year;
+
+                        eventWithLength.FirstArticleTitle = NormalizeString(item.pages[0].title.ToString());
+                        eventWithLength.FirstArticleExtract = item.pages[0].extract;
+                        eventWithLength.FirstArticleImageUrl = item.pages[0].thumbnail.source;
+                        eventWithLength.FirstArticlePageUrl = item.pages[0].content_urls.desktop.page;
+
+                        eventWithLength.SecondArticleTitle = NormalizeString(item.pages[1].title.ToString());
+                        eventWithLength.SecondArticleExtract = item.pages[1].extract;
+                        eventWithLength.SecondArticleImageUrl = item.pages[1].thumbnail.source;
+                        eventWithLength.SecondArticlePageUrl = item.pages[1].content_urls.desktop.page;
+
+                    }
+                }
+                catch (Exception e)
                 {
-                    //Heading length måste vara lång
-                    //We want the longest text possible.
-                    //Makes it more interesting
-                    string pageHeading = item.text;
-                    currentHeadingLength = pageHeading.Length;
-
-                    eventWithLength.Heading = item.text;
-                    eventWithLength.Year = item.year;
-
-                    eventWithLength.FirstArticleTitle = NormalizeString(item.pages[0].title.ToString());
-                    eventWithLength.FirstArticleExtract = item.pages[0].extract;
-                    eventWithLength.FirstArticleImageUrl = item.pages[0].thumbnail.source;
-                    eventWithLength.FirstArticlePageUrl = item.pages[0].content_urls.desktop.page;
-
-                    eventWithLength.SecondArticleTitle = NormalizeString(item.pages[1].title.ToString());
-                    eventWithLength.SecondArticleExtract = item.pages[1].extract;
-                    eventWithLength.SecondArticleImageUrl = item.pages[1].thumbnail.source;
-                    eventWithLength.SecondArticlePageUrl = item.pages[1].content_urls.desktop.page;
+                    Utils.AddToErrorlog(e.Message);
                 }
+
             }
             return eventWithLength;
         }

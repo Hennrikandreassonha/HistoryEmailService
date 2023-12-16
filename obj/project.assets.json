@@ -122,11 +122,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+      "projectUniqueName": "c:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\SendEmailConsoleApp.csproj",
       "projectName": "SendEmailConsoleApp",
-      "projectPath": "c:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+      "projectPath": "c:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\SendEmailConsoleApp.csproj",
       "packagesPath": "C:\\Users\\Dator\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\obj\\",
+      "outputPath": "c:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Dator\\AppData\\Roaming\\NuGet\\NuGet.Config",

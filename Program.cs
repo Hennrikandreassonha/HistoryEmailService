@@ -20,7 +20,7 @@ while (true)
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
 
-    //
+    //currentTime == "07" && 
     if (currentTime == "07" && currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
@@ -78,13 +78,16 @@ while (true)
 
         var emails = EmailReader.getEmails();
 
+        //för testning
+        // string[] emails = { "henrik1995a@live.se", "" };
+
         foreach (var email in emails)
         {
             try
             {
                 Console.WriteLine(email);
 
-                if (email != null)
+                if (email != null && email != "")
                 {
                     message.To.Add(email);
                 }
@@ -97,6 +100,7 @@ while (true)
             {
                 // Handle the exception, e.g., log it or take corrective action.
                 Console.WriteLine($"Error adding email: {e.Message}");
+                Utils.AddToErrorlog(e.Message);
             }
         }
 

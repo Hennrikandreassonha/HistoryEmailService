@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj": {}
+    "C:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\SendEmailConsoleApp.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj": {
+    "C:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\SendEmailConsoleApp.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+        "projectUniqueName": "C:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\SendEmailConsoleApp.csproj",
         "projectName": "SendEmailConsoleApp",
-        "projectPath": "C:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\SendEmailConsoleApp.csproj",
+        "projectPath": "C:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\SendEmailConsoleApp.csproj",
         "packagesPath": "C:\\Users\\Dator\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Dator\\Henke\\VSCODE\\SendEmailConsoleApp\\obj\\",
+        "outputPath": "C:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Dator\\AppData\\Roaming\\NuGet\\NuGet.Config",
