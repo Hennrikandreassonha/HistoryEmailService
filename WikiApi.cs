@@ -205,8 +205,6 @@ namespace SendEmailConsoleApp
                     if (currentHeadingLength < headingLength)
                     {
                         //Heading length måste vara lång
-                        //We want the longest text possible.
-                        //Makes it more interesting
                         string pageHeading = item.text;
                         currentHeadingLength = pageHeading.Length;
 

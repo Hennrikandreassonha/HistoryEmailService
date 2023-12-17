@@ -22,7 +22,7 @@ namespace SendEmailConsoleApp
       var formatedMoreSweBirths = FormatMoreSwePersons(moreSweBirths);
       var formatedPersonText = FormatText(swePerson.Text);
 
-      // var formatedScrapertext = FormatText(scaperObject.Text!);
+      var formatedScrapertext = FormatText(scaperObject.Text!);
 
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
@@ -41,9 +41,14 @@ namespace SendEmailConsoleApp
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
-                  {scaperObject.Text}
+                  {formatedScrapertext}
                   <img src='{scaperObject.PictureUrl}'/>
+                  <br>
                   {scaperObject.PictureText}
+                  <br>
+                  <div>
+                  {scaperObject.ReadMoreLink}
+                  </div>
                 </div>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
@@ -129,26 +134,56 @@ namespace SendEmailConsoleApp
     }
     public static string FormatText(string extract)
     {
-      var splittedText = extract.Split('.');
-      string formatedText = "<p>";
-
-      //Every sentence is an index
-      //Insert new <p> every third sentence.
-      //Use modulus?
-
-      for (int i = 0; i < splittedText.Length; i++)
+      try
       {
+        var splittedText = extract.Split('.').Select(s => s + ". ").ToList().Select(x => x.Trim()).Where(x => x != ".").ToList();
+        List<string> joined = new();
 
+        for (int i = 0; i < splittedText.Count; i++)
+        {
+          var joinedd = "";
 
-        formatedText += $@"</p> <p>";
+          if (i != 0 && i % 3 == 0)
+          {
+            for (int j = i - 3; j < i; j++)
+            {
+              joinedd += splittedText[j];
+            }
+          }
+          joined.Add(joinedd);
+        }
 
-        if (splittedText[i] != "")
-          formatedText += $"{splittedText[i]}.";
+        string formatedText = "<p>";
+
+        List<string> toLoop = new();
+        if (joined.Any(x => !string.IsNullOrWhiteSpace(x.Trim())))
+        {
+          toLoop = joined;
+        }
+        else
+        {
+          var joinedAgain = string.Join(" ", splittedText);
+          joinedAgain.Insert(0, "<p>").Insert(joinedAgain.Length - 1, "<p>");
+          return joinedAgain;
+        }
+        for (int i = 0; i < toLoop.Count; i++)
+        {
+          formatedText += $@"</p> <p>";
+
+          if (toLoop[i] != "")
+            formatedText += $"{toLoop[i]}";
+        }
+
+        formatedText += "</p>";
+
+        return formatedText;
+      }
+      catch (Exception e)
+      {
+        Utils.AddToErrorlog(e.Message);
+        return "";
       }
 
-      formatedText += "</p>";
-
-      return formatedText;
     }
   }
 }
