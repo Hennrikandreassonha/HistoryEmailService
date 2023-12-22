@@ -21,7 +21,7 @@ while (true)
     string currentTime = Utils.GetCurrentTime(false, true);
 
     //currentTime == "07" && 
-    if (currentTime == "07" && currentDay != Utils.GetCurrentDate())
+    if (currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
 
@@ -76,10 +76,12 @@ while (true)
         //Site isnt live i get it from document instead.
         DagensSverigeApi sverigeApi = new DagensSverigeApi(wikiApiClient);
 
-        var emails = EmailReader.getEmails();
+        // var emails = EmailReader.getEmails();
 
         //för testning
-        // string[] emails = { "henrik1995a@live.se", "" };
+        string[] emails = { "henrik1995a@live.se"};
+
+        //"" 
 
         foreach (var email in emails)
         {
@@ -98,9 +100,11 @@ while (true)
             }
             catch (Exception e)
             {
-                // Handle the exception, e.g., log it or take corrective action.
-                Console.WriteLine($"Error adding email: {e.Message}");
-                Utils.AddToErrorlog(e.Message);
+                if (e.StackTrace != null)
+                {
+                    Utils.AddToErrorlog(e.StackTrace);
+                    Console.WriteLine(e.StackTrace);
+                }
             }
         }
 

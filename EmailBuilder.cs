@@ -15,6 +15,8 @@ namespace SendEmailConsoleApp
     {
       var date = Utils.GetCurrentDate();
 
+      var formatedScrapertext = FormatText(scaperObject.Text!);
+
       var firstArtikleFormatedEventText = FormatText(todaysEvent.FirstArticleExtract.ToString());
       var secondFormatedEventText = FormatText(todaysEvent.SecondArticleExtract.ToString());
       var formatedHeading = FormatText(todaysEvent.Heading);
@@ -22,7 +24,6 @@ namespace SendEmailConsoleApp
       var formatedMoreSweBirths = FormatMoreSwePersons(moreSweBirths);
       var formatedPersonText = FormatText(swePerson.Text);
 
-      var formatedScrapertext = FormatText(scaperObject.Text!);
 
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
@@ -31,7 +32,7 @@ namespace SendEmailConsoleApp
 
       return $@"
             <html>
-              <body>
+              <body style='max-width: 600px''>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;''> 
 
@@ -41,13 +42,14 @@ namespace SendEmailConsoleApp
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
-                  {formatedScrapertext}
+                  {scaperObject.Text}
                   <img src='{scaperObject.PictureUrl}'/>
                   <br>
                   {scaperObject.PictureText}
                   <br>
                   <div>
-                  {scaperObject.ReadMoreLink}
+                  {scaperObject.TermsInlineExtraInfo}
+                  
                   </div>
                 </div>
 
@@ -180,7 +182,11 @@ namespace SendEmailConsoleApp
       }
       catch (Exception e)
       {
-        Utils.AddToErrorlog(e.Message);
+        if (e.StackTrace != null)
+        {
+          Utils.AddToErrorlog(e.StackTrace);
+          Console.WriteLine(e.StackTrace);
+        }
         return "";
       }
 

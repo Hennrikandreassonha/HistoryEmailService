@@ -116,7 +116,11 @@ namespace SendEmailConsoleApp
                     }
                     catch (Exception e)
                     {
-                        Utils.AddToErrorlog(e.Message);
+                        if (e.StackTrace != null)
+                        {
+                            Utils.AddToErrorlog(e.StackTrace);
+                            Console.WriteLine(e.StackTrace);
+                        }
                     }
 
                     if (!PersonHasBoringBirthDate(swePerson) && swePerson.ImageUrl != "")
@@ -164,7 +168,11 @@ namespace SendEmailConsoleApp
                     }
                     catch (Exception e)
                     {
-                        Utils.AddToErrorlog(e.Message);
+                        if (e.StackTrace != null)
+                        {
+                            Utils.AddToErrorlog(e.StackTrace);
+                            Console.WriteLine(e.StackTrace);
+                        }
                     }
 
                     swePersons.Add(swePerson);
@@ -225,7 +233,11 @@ namespace SendEmailConsoleApp
                 }
                 catch (Exception e)
                 {
-                    Utils.AddToErrorlog(e.Message);
+                    if (e.StackTrace != null)
+                    {
+                        Utils.AddToErrorlog(e.StackTrace);
+                        Console.WriteLine(e.StackTrace);
+                    }
                 }
 
             }
