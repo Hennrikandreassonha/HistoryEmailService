@@ -37,5 +37,20 @@ namespace SendEmailConsoleApp
 
             File.AppendAllText(errorPath, $"Error occured: {dateNow} Error: {text} {Environment.NewLine}");
         }
+        public static string AddParagrahDivision(string text)
+        {
+
+            var splitted = text.Split(". ").ToList();
+
+            for (int i = 0; i < splitted.Count(); i++)
+            {
+                if (i % 3 == 0 && i != 0)
+                {
+                    splitted.Insert(i, "<p> </p>");
+                }
+            }
+
+            return string.Join(". ", splitted);
+        }
     }
 }

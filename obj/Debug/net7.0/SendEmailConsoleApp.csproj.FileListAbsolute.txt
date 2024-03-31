@@ -52,3 +52,4 @@ C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\refint\SendEmai
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.pdb
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.genruntimeconfig.cache
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\ref\SendEmailConsoleApp.dll
+C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.sourcelink.json

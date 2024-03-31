@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "98zvXRSlgbG40ab1ReXB0fuZIjWOAOHTcoyWuKFHToR7g4Awl6TPA2oUo6tNC0fWhbAS3P2PNkiM1V07PRGgLA==",
+  "dgSpecHash": "YILw2Wj5UG4lOuKyEbFUdbtOEpEw7ofG6DiEhfQMgM4rje6BtgiKNr4Ha/sgj/kkZ+zT2LDNegnswCfPrCTrCA==",
   "success": true,
   "projectFilePath": "C:\\Users\\Dator\\Henke\\VSCODE\\HistoryEmailService\\SendEmailConsoleApp.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Dator\\.nuget\\packages\\htmlagilitypack\\1.11.53\\htmlagilitypack.1.11.53.nupkg.sha512",
-    "C:\\Users\\Dator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512"
+    "C:\\Users\\Dator\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\Dator\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.17\\microsoft.netcore.app.ref.7.0.17.nupkg.sha512",
+    "C:\\Users\\Dator\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.17\\microsoft.windowsdesktop.app.ref.7.0.17.nupkg.sha512",
+    "C:\\Users\\Dator\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.17\\microsoft.aspnetcore.app.ref.7.0.17.nupkg.sha512",
+    "C:\\Users\\Dator\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\7.0.17\\microsoft.netcore.app.host.win-x64.7.0.17.nupkg.sha512"
   ],
   "logs": []
 }

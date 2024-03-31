@@ -216,7 +216,8 @@ namespace SendEmailConsoleApp
                         string pageHeading = item.text;
                         currentHeadingLength = pageHeading.Length;
 
-                        eventWithLength.Heading = item.text;
+                        string text = item.text;
+                        eventWithLength.Heading = Utils.AddParagrahDivision(text);
                         eventWithLength.Year = item.year;
 
                         eventWithLength.FirstArticleTitle = NormalizeString(item.pages[0].title.ToString());

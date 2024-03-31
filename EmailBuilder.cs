@@ -27,7 +27,8 @@ namespace SendEmailConsoleApp
 
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
-
+      var textCenter = "text-align: center;";
+      var flexAlignCenter = "display: flex; justify-content: center;";
       //<h3 style='color: red;'>Passar bra o skriva meddelanden i </h3>
 
       return $@"
@@ -36,7 +37,7 @@ namespace SendEmailConsoleApp
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;''> 
 
-                    <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
+                    <h1 style='color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
                       {scaperObject.Header} <br>
                     </h1>
                 </div>
@@ -55,7 +56,7 @@ namespace SendEmailConsoleApp
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
                     
-                    <h1 style='color: {sweColorYellow}; padding: 0.5rem;'>
+                    <h1 style='color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
                       Dagens händelse ägde rum <br>
                        <p style= 'padding: 0.5rem; margin: 0px;'>{date} - {todaysEvent.Year}.</p>
                     </h1>
@@ -86,7 +87,7 @@ namespace SendEmailConsoleApp
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'>  
                 
-                    <h1 style= 'color: {sweColorYellow}; padding: 0.5rem;'>Dagens födelseperson född <br> 
+                    <h1 style= 'color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>Dagens födelseperson född <br> 
                     {date} - {swePerson.BirthYear}.</h1>
                  
                 </div>
@@ -102,7 +103,7 @@ namespace SendEmailConsoleApp
                 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
 
-                  <h3 style= 'color: {sweColorYellow}; padding: 0.2rem;' 
+                  <h3 style= 'color: {sweColorYellow}; padding: 0.2rem; {textCenter}' 
                   >Fler svenskar födda {date}</h3>
 
                 </div>
@@ -114,6 +115,9 @@ namespace SendEmailConsoleApp
                   {formatedMoreSweBirths}
 
                 </div>
+
+               
+
               </body>
             </html>
             ";

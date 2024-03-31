@@ -27,3 +27,8 @@ Error occured: 12/22/2023 11:56:13 Error:    at System.String.Insert(Int32 start
    at SendEmailConsoleApp.EmailBuilder.FormatText(String extract) in C:\Users\Dator\Henke\VSCODE\HistoryEmailService\EmailBuilder.cs:line 167 
 Error occured: 12/22/2023 11:59:18 Error:    at System.String.Insert(Int32 startIndex, String value)
    at SendEmailConsoleApp.EmailBuilder.FormatText(String extract) in C:\Users\Dator\Henke\VSCODE\HistoryEmailService\EmailBuilder.cs:line 167 
+Error occured: 3/31/2024 19:49:54 Error:    at CallSite.Target(Closure, CallSite, Type, Object)
+   at System.Dynamic.UpdateDelegates.UpdateAndExecute2[T0,T1,TRet](CallSite site, T0 arg0, T1 arg1)
+   at SendEmailConsoleApp.WikiApi.GetEvent(Object eventList) in C:\Users\Dator\Henke\VSCODE\HistoryEmailService\WikiApi.cs:line 219 
+Error occured: 3/31/2024 19:49:54 Error:    at CallSite.Target(Closure, CallSite, Type, Object)
+   at SendEmailConsoleApp.WikiApi.GetEvent(Object eventList) in C:\Users\Dator\Henke\VSCODE\HistoryEmailService\WikiApi.cs:line 219 

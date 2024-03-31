@@ -1,11 +1,6 @@
-﻿using System.Runtime.InteropServices;
-using System.Net;
-using System.Net.Http.Headers;
+﻿using System.Net;
 using System.Net.Mail;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SendEmailConsoleApp;
-using System.Security.Cryptography.X509Certificates;
 
 HttpClient wikiApiClient = new HttpClient();
 
@@ -21,7 +16,7 @@ while (true)
     string currentTime = Utils.GetCurrentTime(false, true);
 
     //currentTime == "07" && 
-    if (currentTime == "07" && currentDay != Utils.GetCurrentDate())
+    if (currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
 
@@ -46,7 +41,8 @@ while (true)
         moreSweBirths = moreSweBirths.OrderBy(x => x.BirthYear).Where(x => x.PageUrl != swePerson.PageUrl).ToList();
 
         //Handling the event of the day
-        var allEvents = response.selected;
+        //Använda events istället
+        var allEvents = response.events;
         TodaysEvent todaysEvent = wikiApi.GetEvent(allEvents);
 
         //Getting todaysarticle from Webscraper
@@ -76,10 +72,10 @@ while (true)
         //Site isnt live i get it from document instead.
         DagensSverigeApi sverigeApi = new DagensSverigeApi(wikiApiClient);
 
-        var emails = EmailReader.getEmails();
+        // var emails = EmailReader.getEmails();
 
         //för testning
-        // string[] emails = { "henrik1995a@live.se"};
+        string[] emails = { "henrik1995a@live.se" };
 
         foreach (var email in emails)
         {
