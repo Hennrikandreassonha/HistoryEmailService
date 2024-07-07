@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Betalgo.OpenAI" Version="8.5.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.53" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>

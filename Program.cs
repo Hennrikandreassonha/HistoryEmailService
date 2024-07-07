@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
+using System.Runtime.CompilerServices;
 using SendEmailConsoleApp;
 
 HttpClient wikiApiClient = new HttpClient();
@@ -8,6 +9,34 @@ WikiApi wikiApi = new WikiApi(wikiApiClient);
 
 string currentDay = "";
 
+var key = File.ReadAllLines("../openaiapikey.txt");
+
+var ss = new AiService(key[0]);
+// AiService.ClearSubjectsToSkip("SubjectsToSkip.txt");
+
+var subjectToFocus = "Rome";
+var currentSubjectSkip = File.ReadAllLines("SubjectsToSkip.txt");
+
+var subjectsToSkipString = string.Join(", ", currentSubjectSkip);
+
+var historyEvent = await ss.SendQuestion($"Tell me a historic event focusing around {subjectToFocus} IMPORTANT! Do not post an historical event regarding these subjects, otherwise we get duplicate events: {subjectsToSkipString}");
+
+var subjectsToSkip = new string(historyEvent
+    .SkipWhile(x => x != '(')
+    .Skip(1)
+    .TakeWhile(x => x != ')')
+    .ToArray());
+
+var skip = File.ReadAllLines("SubjectsToSkip.txt").ToList();
+skip.Add(subjectsToSkip);
+File.WriteAllLines("SubjectsToSkip.txt", skip);
+
+
+//Hitta bild till 
+//Man kan skicka in ett ämne som går i en vecka.
+//Användare kan skicka in förslag
+//Lista som uppdateras varje vecka lägg i ämne som skall skippas.
+//Cleara subjectsto skip varje vecka vid nytt ämne.
 while (true)
 {
     Console.WriteLine("I loop");
@@ -15,8 +44,9 @@ while (true)
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
 
+
     //currentTime == "07" && 
-    if (currentTime == "07" &&  currentDay != Utils.GetCurrentDate())
+    if (currentTime == "07" && currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Skickar mail");
 
@@ -33,19 +63,13 @@ while (true)
         List<SweUser> sweBirths = wikiApi.GetSwePersons(allBirths);
         var swePerson = sweBirths.OrderByDescending(x => x.Text.Length).FirstOrDefault();
 
-        //For the "more swede birth" section.
         List<SweUser> moreSweBirths = wikiApi.GetMoreSweBirths(allBirths);
 
-        //Removing the featured sweperson.
-        //The rest will be displayed below as "more swe birth persons".
         moreSweBirths = moreSweBirths.OrderBy(x => x.BirthYear).Where(x => x.PageUrl != swePerson.PageUrl).ToList();
 
-        //Handling the event of the day
-        //Använda events istället
         var allEvents = response.events;
         TodaysEvent todaysEvent = wikiApi.GetEvent(allEvents);
 
-        //Getting todaysarticle from Webscraper
         ScraperObject scraperObject = new()
         {
             Url = "https://www.so-rummet.se/aret-runt"
@@ -57,7 +81,6 @@ while (true)
 
         string fromEmail = "karinsvaxthus@gmail.com";
         string fromEmailPw = "uaittetofmedckvy";
-
         message.From = new MailAddress(fromEmail);
         message.Subject = $"Historieuppdatering {Utils.GetCurrentDate(true)}";
 
@@ -68,8 +91,6 @@ while (true)
             EnableSsl = true,
         };
 
-        //Getting the subscribed users from WebsiteApi.
-        //Site isnt live i get it from document instead.
         DagensSverigeApi sverigeApi = new DagensSverigeApi(wikiApiClient);
 
         var emails = EmailReader.getEmails();
@@ -112,5 +133,5 @@ while (true)
         currentDay = Utils.GetCurrentDate();
     }
 
-    Thread.Sleep(5000);
+    Thread.Sleep(10000);
 }

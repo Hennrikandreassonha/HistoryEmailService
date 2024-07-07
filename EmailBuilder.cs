@@ -30,6 +30,7 @@ namespace SendEmailConsoleApp
       var textCenter = "text-align: center;";
       var flexAlignCenter = "display: flex; justify-content: center;";
       //<h3 style='color: red;'>Passar bra o skriva meddelanden i </h3>
+      //Finns lite text längst ned om man vill skriva meddelande tex välkomna nya premunranter
 
       return $@"
             <html>

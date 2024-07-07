@@ -1,0 +1,30 @@
+ <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'>
+
+                    <h1 style= 'color: {sweColorYellow}; padding: 0.2rem; {textCenter}' 
+                  >Vill du lägga till en vän i dagens historia nyhetsbrev?</h1>
+
+                <div style='{flexAlignCenter}'>
+                  <input type='text' placeholder='Ange e-post' style='height:20px; width: 50%;'>
+                </div>
+                
+                <hr>
+
+                <div style='background-color: {sweColorBlue}; padding: 10px; {flexAlignCenter}'>
+
+                <a href='https://dagenshistoria.se/unsubscribe' style='color: {sweColorYellow};'>Klicka här för att avprenumerera</a>
+                </div>
+
+
+
+                                <h3>Vi välkomnar våra nya medlemmar i nyhetsbrevet:</h3>
+                <ul>
+                  <li>Mikael Klaar</li>
+                  <li>Merit Klaar</li>
+                  <li>Tim Klaar</li>
+                  <li>Jessica Kvist</li>
+                </ul>
+                <h4>Vill även passa på att gratulera till er nya livstidspremuration till vårt historienyhetsbrev.</h4>
+                <h4>Jag hoppas att vårt dagliga mail tillbringar lycka i era liv</h4>
+                <h4>I mailet kan ni läsa om två historiska händelser som hände just detta datumet någon gång i historien. Mailet skickas ut kl 7 varje dag.</h4>
+                <h4>Väl mött! - Er historieskribent</h4>
+                <h5>Obs, mailet är gratis och går inte att gå ur :)</h5>
