@@ -11,6 +11,9 @@
     <PackageReference Include="Betalgo.OpenAI" Version="8.5.1" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.53" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="OpenAI" Version="1.11.0" />
+    <PackageReference Include="OpenAI-DotNet" Version="8.2.1" />
+    <PackageReference Include="RestSharp" Version="111.4.1" />
   </ItemGroup>
 
 </Project>

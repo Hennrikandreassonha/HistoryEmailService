@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using System.Runtime.CompilerServices;
+using HistoryEmailService;
+using RestSharp;
 using SendEmailConsoleApp;
 
 HttpClient wikiApiClient = new HttpClient();
@@ -9,34 +11,41 @@ WikiApi wikiApi = new WikiApi(wikiApiClient);
 
 string currentDay = "";
 
-var key = File.ReadAllLines("../openaiapikey.txt");
+var aiService = new AiService(File.ReadAllLines("../openaiapikey.txt")[0]);
 
-var ss = new AiService(key[0]);
-// AiService.ClearSubjectsToSkip("SubjectsToSkip.txt");
+var imageApi = new AiImageGenerator();
+await imageApi.GenerateImage();
 
-var subjectToFocus = "Rome";
-var currentSubjectSkip = File.ReadAllLines("SubjectsToSkip.txt");
+// // if (DateTime.Today.DayOfWeek == DayOfWeek.Monday)
 
-var subjectsToSkipString = string.Join(", ", currentSubjectSkip);
+System.Console.WriteLine();
+if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+{
 
-var historyEvent = await ss.SendQuestion($"Tell me a historic event focusing around {subjectToFocus} IMPORTANT! Do not post an historical event regarding these subjects, otherwise we get duplicate events: {subjectsToSkipString}");
+    var subjectToFocus = "Svensk industrihistoria";
+    var subjects = aiService.GetSubject("../../AiSubjects.txt");
 
-var subjectsToSkip = new string(historyEvent
-    .SkipWhile(x => x != '(')
-    .Skip(1)
-    .TakeWhile(x => x != ')')
-    .ToArray());
+    // var bulletPoints = await aiService.InitWeek($"Give me 7 events or subjects about {subjectToFocus}, these should be bullet points. The historical events should be pretty easy to write about. The essays are going to be 500 characters long.");
 
-var skip = File.ReadAllLines("SubjectsToSkip.txt").ToList();
-skip.Add(subjectsToSkip);
-File.WriteAllLines("SubjectsToSkip.txt", skip);
+    // aiService.ClearList("SubjectsToSkip.txt");
+    // List<string> weekSubjects = bulletPoints.Split('*')
+    //                              .Select(x => x.Trim())
+    //                              .Where(x => !string.IsNullOrEmpty(x))
+    //                              .ToList();
+    // aiService.AddSubjectsToList("SubjectsToSkip.txt", weekSubjects);
+}
 
-
-//Hitta bild till 
+string subject = aiService.GetSubject("AiSubjects.txt");
+var story = await aiService.SendQuestion($"Berätta en historia om detta ämnet: {subject}.");
+//Ändra denna sen till någon bättre
+var ss = await aiService.GenerateImageAsync(subject);
+Console.WriteLine("");
+//Hitta bild till - Kanske med api?
 //Man kan skicka in ett ämne som går i en vecka.
 //Användare kan skicka in förslag
 //Lista som uppdateras varje vecka lägg i ämne som skall skippas.
 //Cleara subjectsto skip varje vecka vid nytt ämne.
+//Om ingen skickat in ämne så kommer AI på en automatiskt.
 while (true)
 {
     Console.WriteLine("I loop");
@@ -45,8 +54,8 @@ while (true)
     string currentTime = Utils.GetCurrentTime(false, true);
 
 
-    //currentTime == "07" && 
-    if (currentTime == "07" && currentDay != Utils.GetCurrentDate())
+    // currentTime == "07" && currentDay != Utils.GetCurrentDate()
+    if (true)
     {
         Console.WriteLine("Skickar mail");
 
@@ -93,10 +102,10 @@ while (true)
 
         DagensSverigeApi sverigeApi = new DagensSverigeApi(wikiApiClient);
 
-        var emails = EmailReader.getEmails();
+        // var emails = EmailReader.getEmails();
 
         //för testning
-        // string[] emails = { "henrik1995a@live.se" };
+        string[] emails = { "henrik1995a@live.se" };
 
         foreach (var email in emails)
         {

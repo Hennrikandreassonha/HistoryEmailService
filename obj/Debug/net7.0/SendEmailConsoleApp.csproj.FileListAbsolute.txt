@@ -46,7 +46,6 @@ C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsol
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.AssemblyInfoInputs.cache
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.AssemblyInfo.cs
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.csproj.CoreCompileInputs.cache
-C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.csproj.CopyComplete
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.dll
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\refint\SendEmailConsoleApp.dll
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmailConsoleApp.pdb
@@ -64,3 +63,8 @@ C:\Users\Dator\Henke\VSCODE\HistoryEmailService\bin\Debug\net7.0\Microsoft.Exten
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\bin\Debug\net7.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
 C:\Users\Dator\Henke\VSCODE\HistoryEmailService\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+C:\Users\Dator\Henke\VSCODE\HistoryEmailService\bin\Debug\net7.0\Microsoft.Bcl.AsyncInterfaces.dll
+C:\Users\Dator\Henke\VSCODE\HistoryEmailService\bin\Debug\net7.0\OpenAI_API.dll
+C:\Users\Dator\Henke\VSCODE\HistoryEmailService\bin\Debug\net7.0\OpenAI-DotNet.dll
+C:\Users\Dator\Henke\VSCODE\HistoryEmailService\bin\Debug\net7.0\RestSharp.dll
+C:\Users\Dator\Henke\VSCODE\HistoryEmailService\obj\Debug\net7.0\SendEmai.2B74BDBF.Up2Date

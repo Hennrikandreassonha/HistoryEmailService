@@ -35,6 +35,7 @@ namespace SendEmailConsoleApp
       return $@"
             <html>
               <body style='max-width: 600px''>
+              <a href='https://www.henrikhall.org/' style='padding:20px; font-size: 1em; background-color: #004b87; border: none; cursor: pointer; border-radius: 3px; color: white;'>Klicka för att lämna ditt tips!</a>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;''> 
 

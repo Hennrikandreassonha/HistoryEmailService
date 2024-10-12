@@ -1,11 +1,13 @@
 using OpenAI.ObjectModels.RequestModels;
-
+using OpenAI_API;
+using OpenAI_API.Images;
 namespace SendEmailConsoleApp
 {
     public class AiService
     {
         public string ApiKey { get; set; }
         public OpenAI.Managers.OpenAIService ChatService { get; set; }
+        private readonly OpenAIAPI _openAIAPI;
         public AiService()
         {
         }
@@ -17,16 +19,26 @@ namespace SendEmailConsoleApp
             {
                 ApiKey = ApiKey
             });
+            _openAIAPI = new OpenAIAPI(apiKey);
         }
-        public async Task<string> SendQuestion(string message)
+        public async Task<string> GenerateImageAsync(string prompt)
+        {
+            var imageResult = await _openAIAPI.ImageGenerations
+            .CreateImageAsync(new ImageGenerationRequest
+            {
+                Prompt = prompt + "realistic",
+            });
+            return imageResult.Data[0].Url;
+        }
+        public async Task<string> InitWeek(string newWeekSubject)
         {
             var completionResult = await ChatService.ChatCompletion.CreateCompletion(
             new ChatCompletionCreateRequest
             {
                 Messages = new List<ChatMessage>
                 {
-                new("assistant", "You must tell a historical event. The event must have taken place before 1950. Write nothing extra except the historical event. Start the sentence with a title. Rules: Title: Start with the title of the text and after the title add /, Paragraph Division: For paragraph division use / Language: Always write in swedish, Length: Text should be atleast 500 characters long, divided into paragraph divisions like described before. Links: At the bottom of text refer to 2 wikipedia articles that are essential for the event, Main subject: At the end of the event give 3 essential words or subjects in () that are used to make sure we dont get same historical event twice. Note that these words should not be the main subject, New Subjects: It is important to skip subjects that are presented in prompt, do not "),
-                new("user", message),
+                new("assistant", "You must tell 7 different titles about subjects that i can write about. Always respond in swedish. Please split the events by *"),
+                new("user", newWeekSubject),
                 },
                 Model = OpenAI.ObjectModels.Models.Gpt_3_5_Turbo,
                 Temperature = 1.0F,
@@ -49,16 +61,66 @@ namespace SendEmailConsoleApp
 
             return "";
         }
-    public static void ClearSubjectsToSkip(string filePath)
-    {
-        var emptyList = new List<string>();
-        File.WriteAllLines(filePath, emptyList);
+        public async Task<string> SendQuestion(string message)
+        {
+            var completionResult = await ChatService.ChatCompletion.CreateCompletion(
+            new ChatCompletionCreateRequest
+            {
+                Messages = new List<ChatMessage>
+                {
+                new("assistant", "Berätta en intressant historia som är minst 500 karaktärer lång. Längst ned skall du också ha en länk till en wikipedia artikel angående historien. Splitta halva historien med \n"),
+                new("user", message),
+                },
+                Model = OpenAI.ObjectModels.Models.Gpt_3_5_Turbo,
+                Temperature = 0.35F,
+                MaxTokens = 1000,
+                N = 1
+            });
+
+            if (completionResult.Successful)
+            {
+                return completionResult.Choices[0].Message.Content;
+            }
+            else
+            {
+                if (completionResult.Error == null)
+                {
+                    throw new Exception("Unknown Error");
+                }
+                Console.WriteLine($"{completionResult.Error.Code}: {completionResult.Error.Message}");
+            }
+
+            return "";
+        }
+        public void ClearList(string filePath)
+        {
+            var emptyList = new List<string>();
+            File.WriteAllLines(filePath, emptyList);
+        }
+        public void AddSubjectsToList(string filePath, List<string> newSubjects)
+        {
+            var subjectSkips = File.ReadAllLines(filePath).ToList();
+            subjectSkips.AddRange(newSubjects);
+            File.WriteAllLines(filePath, subjectSkips);
+        }
+
+        public string GetSubject(string filePath)
+        {
+            var subjectSkips = File.ReadAllLines(filePath).ToList();
+            string subject = subjectSkips.First();
+            subjectSkips.RemoveAt(0);
+            File.WriteAllLines(filePath, subjectSkips);
+            return subject;
+        }
     }
-    public static void AddSubjectToSkip(string filePath, string newSubject)
+    public class ImageGenerationParams
     {
-        var subjectSkips = File.ReadAllLines(filePath).ToList();
-        subjectSkips.Add(newSubject);
-        File.WriteAllLines(filePath, subjectSkips);
-    }
+        public string ModelId { get; set;}
+        public string Prompt { get; set; }
+        public string OutputFormat { get; set; }
+        public int Width { get; set; }
+        public int Height { get; set; }
+        public int Steps { get; set; }
+        public int Guidance { get; set; }
     }
 }

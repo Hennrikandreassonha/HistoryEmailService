@@ -10,7 +10,10 @@
         "dependencies": {
           "Betalgo.OpenAI": "8.5.1",
           "HtmlAgilityPack": "1.11.53",
-          "Newtonsoft.Json": "13.0.3"
+          "Newtonsoft.Json": "13.0.3",
+          "OpenAI": "1.11.0",
+          "OpenAI-DotNet": "8.2.1",
+          "RestSharp": "111.4.1"
         },
         "runtime": {
           "SendEmailConsoleApp.dll": {}
@@ -33,6 +36,14 @@
           "lib/netstandard2.0/HtmlAgilityPack.dll": {
             "assemblyVersion": "1.11.53.0",
             "fileVersion": "1.11.53.0"
+          }
+        }
+      },
+      "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
+        "runtime": {
+          "lib/netstandard2.1/Microsoft.Bcl.AsyncInterfaces.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "4.700.20.21406"
           }
         }
       },
@@ -155,6 +166,35 @@
             "fileVersion": "13.0.3.27908"
           }
         }
+      },
+      "OpenAI/1.11.0": {
+        "dependencies": {
+          "Microsoft.Bcl.AsyncInterfaces": "1.1.1",
+          "Microsoft.Extensions.Http": "7.0.0",
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/OpenAI_API.dll": {
+            "assemblyVersion": "1.11.0.0",
+            "fileVersion": "1.11.0.0"
+          }
+        }
+      },
+      "OpenAI-DotNet/8.2.1": {
+        "runtime": {
+          "lib/net6.0/OpenAI-DotNet.dll": {
+            "assemblyVersion": "8.2.1.0",
+            "fileVersion": "8.2.1.0"
+          }
+        }
+      },
+      "RestSharp/111.4.1": {
+        "runtime": {
+          "lib/net7.0/RestSharp.dll": {
+            "assemblyVersion": "111.4.1.0",
+            "fileVersion": "111.4.1.0"
+          }
+        }
       }
     }
   },
@@ -177,6 +217,13 @@
       "sha512": "sha512-FeBqVmrMVoKFcsg6BhMJ5FYSx476AKDic9oHk5DsYSj606agR1XuxaaicxJ28X/LZkPTX51e3NaB8QJ5G+1B/w==",
       "path": "htmlagilitypack/1.11.53",
       "hashPath": "htmlagilitypack.1.11.53.nupkg.sha512"
+    },
+    "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-yuvf07qFWFqtK3P/MRkEKLhn5r2UbSpVueRziSqj0yJQIKFwG1pq9mOayK3zE5qZCTs0CbrwL9M6R8VwqyGy2w==",
+      "path": "microsoft.bcl.asyncinterfaces/1.1.1",
+      "hashPath": "microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512"
     },
     "Microsoft.Extensions.Configuration.Abstractions/7.0.0": {
       "type": "package",
@@ -254,6 +301,27 @@
       "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
       "path": "newtonsoft.json/13.0.3",
       "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
+    },
+    "OpenAI/1.11.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ezjdykDSC/j5zB76S0WWIYuI3GwiOtYtjZZBkaGMMOC6QZgyJX4mzN28XMScTftxXjsY0RTxDF0ZkmXxwQwl9w==",
+      "path": "openai/1.11.0",
+      "hashPath": "openai.1.11.0.nupkg.sha512"
+    },
+    "OpenAI-DotNet/8.2.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GyPOOadgK+R/VrAd/HdyIZKALYq8io7e2l33oXYcwWN9ewMR7egDXHmyRpjxQ8XdJPVolc/U80lkaHCDSg8qrg==",
+      "path": "openai-dotnet/8.2.1",
+      "hashPath": "openai-dotnet.8.2.1.nupkg.sha512"
+    },
+    "RestSharp/111.4.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MhrBdwqYd+ezd3xD+c6eaAVcLJoWI+2TBH7rqX149nbYRkPJJfK/UbrgJVfKN9ZMehOFzo2PmKIZjS1ATnxEAQ==",
+      "path": "restsharp/111.4.1",
+      "hashPath": "restsharp.111.4.1.nupkg.sha512"
     }
   }
 }
