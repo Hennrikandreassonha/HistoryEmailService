@@ -2,61 +2,89 @@ using System;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using RestSharp;
+using SendEmailConsoleApp;
 
 namespace HistoryEmailService
 {
+    public class AiGeneratedEvent
+    {
+        public string Subject { get; set; }
+        public string Story { get; set; }
+        public string ImageUrl { get; set; }
+        public AiGeneratedEvent(string subject, string story, string imageUrl)
+        {
+            Subject = subject;
+            Story = story;
+            ImageUrl = imageUrl;
+        }
+    }
     public class AiImageGenerator
     {
-        public static string OpenAiKey = File.ReadAllLines("../openaiapikey.txt")[0];
-        public async Task GenerateImage()
+        private readonly AiService _aiService;
+
+        public AiImageGenerator(AiService aiService)
         {
-            // OpenAI DALL-E API base URL
+            _aiService = aiService;
+        }
+        public static string OpenAiKey = File.ReadAllLines("../openaiapikey.txt")[0];
+        private async Task<string> GenerateImage(string prompt)
+        {
             var options = new RestClientOptions("https://api.openai.com/v1/images/generations");
             var client = new RestClient(options);
 
-            // Creating the POST request
             var request = new RestRequest("https://api.openai.com/v1/images/generations", Method.Post);
 
             request.AddHeader("accept", "application/json");
             request.AddHeader("authorization", $"Bearer {OpenAiKey}");
 
-            // Defining the parameters for the image generation
             var imageParams = new
             {
-                prompt = "generate a picture of a soilder during 30 åriga kriget swedish with realstic clothes and weapons going into war",
+                prompt,
                 n = 1,
                 size = "1024x1024",
                 model = "dall-e-3"
             };
-
-            // Adding the parameters as JSON body
             request.AddJsonBody(imageParams);
 
-            // Sending the POST request and awaiting the response
             var response = await client.PostAsync(request);
-
-            // Output the response (image URL or error message)
             if (response != null && response.IsSuccessful)
             {
-                // Print the raw JSON response
-                Console.WriteLine(response.Content);
-
-                // Parse the JSON response using JObject from Newtonsoft.Json
                 var jsonResponse = JObject.Parse(response.Content);
 
-                // Extract the image URL from the response
                 var imageUrl = jsonResponse["data"][0]["url"].ToString();
-
-                // Print the image URL to the console
                 Console.WriteLine($"Generated Image URL: {imageUrl}");
-
-                // Optionally: Open the image in the browser
-                // System.Diagnostics.Process.Start(new ProcessStartInfo(imageUrl) { UseShellExecute = true });
+                return imageUrl;
             }
             else
             {
-                Console.WriteLine("Failed to generate image: " + response.ErrorMessage);
+                return "Failed to generate image: " + response.ErrorMessage;
             }
         }
+        public async Task<string> TryGetImage(string prompt)
+        {
+            var success = false;
+            string picUrl = "";
+            while (success == false)
+            {
+                try
+                {
+                    picUrl = await GenerateImage(prompt);
+                    success = true;
+                }
+                catch (Exception ex)
+                {
+                    var err = $"Image generation with Ex message: {ex.Message} And prompt:  {prompt} failed. Date : {DateTime.Now}";
+                    Utils.AddToErrorlog(err);
+                    prompt = await GetNewPrompt(prompt);
+                }
+            }
+            return picUrl;
+        }
+        private async Task<string> GetNewPrompt(string oldPrompt)
+        {
+            var newPrompt = await _aiService.GetReplacementPrompt(oldPrompt);
+            return newPrompt;
+        }
+
     }
 }

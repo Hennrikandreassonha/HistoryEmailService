@@ -9,43 +9,42 @@ HttpClient wikiApiClient = new HttpClient();
 
 WikiApi wikiApi = new WikiApi(wikiApiClient);
 
-string currentDay = "";
 
 var aiService = new AiService(File.ReadAllLines("../openaiapikey.txt")[0]);
 
-var imageApi = new AiImageGenerator();
-await imageApi.GenerateImage();
 
-// // if (DateTime.Today.DayOfWeek == DayOfWeek.Monday)
+var imageApi = new AiImageGenerator(aiService);
 
-System.Console.WriteLine();
-if (DateTime.Now.DayOfWeek == DayOfWeek.Monday)
+if (true)
 {
+    var subjectToFocus = "Svensks krigsindustri under 1600-2000";
 
-    var subjectToFocus = "Svensk industrihistoria";
-    var subjects = aiService.GetSubject("../../AiSubjects.txt");
+    var bulletPoints = await aiService.InitWeek($"Subject to generate bullet points about: {subjectToFocus}");
+    aiService.AddSubjectsToList("../AiSubjects.txt", bulletPoints.Split("*").ToList());
 
-    // var bulletPoints = await aiService.InitWeek($"Give me 7 events or subjects about {subjectToFocus}, these should be bullet points. The historical events should be pretty easy to write about. The essays are going to be 500 characters long.");
+    var subjects = aiService.GetSubject("../AiSubjects.txt");
 
-    // aiService.ClearList("SubjectsToSkip.txt");
-    // List<string> weekSubjects = bulletPoints.Split('*')
-    //                              .Select(x => x.Trim())
-    //                              .Where(x => !string.IsNullOrEmpty(x))
-    //                              .ToList();
-    // aiService.AddSubjectsToList("SubjectsToSkip.txt", weekSubjects);
+    aiService.ClearList("SubjectsToSkip.txt");
+    List<string> weekSubjects = bulletPoints.Split('*')
+                                 .Select(x => x.Trim())
+                                 .Where(x => !string.IsNullOrEmpty(x))
+                                 .ToList();
+    aiService.AddSubjectsToList("SubjectsToSkip.txt", weekSubjects);
 }
 
-string subject = aiService.GetSubject("AiSubjects.txt");
-var story = await aiService.SendQuestion($"Berätta en historia om detta ämnet: {subject}.");
-//Ändra denna sen till någon bättre
-var ss = await aiService.GenerateImageAsync(subject);
-Console.WriteLine("");
-//Hitta bild till - Kanske med api?
-//Man kan skicka in ett ämne som går i en vecka.
-//Användare kan skicka in förslag
-//Lista som uppdateras varje vecka lägg i ämne som skall skippas.
-//Cleara subjectsto skip varje vecka vid nytt ämne.
-//Om ingen skickat in ämne så kommer AI på en automatiskt.
+string subject = new string(aiService.GetSubject("../AiSubjects.txt")
+                               .SkipWhile(x => !char.IsLetter(x))
+                               .ToArray());
+var story = await aiService.SendHistoryQuestion($"Berätta en historia om detta ämnet: {subject}.");
+
+var prompt = await aiService.GetImagePrompt(story);
+
+var imageUrl = await imageApi.TryGetImage(prompt);
+
+AiGeneratedEvent aiGeneratedEvent = new AiGeneratedEvent(subject, story, imageUrl);
+
+var currentDay = "";
+
 while (true)
 {
     Console.WriteLine("I loop");
@@ -100,7 +99,7 @@ while (true)
             EnableSsl = true,
         };
 
-        DagensSverigeApi sverigeApi = new DagensSverigeApi(wikiApiClient);
+        // DagensSverigeApi sverigeApi = new DagensSverigeApi(wikiApiClient);
 
         // var emails = EmailReader.getEmails();
 
@@ -115,7 +114,7 @@ while (true)
 
                 if (email != null && email != "")
                 {
-                    message.To.Add(email);
+                    message.Bcc.Add(email);
                 }
                 else
                 {
@@ -132,8 +131,8 @@ while (true)
             }
         }
 
-        EmailBuilder emailBuilder = new();
-        message.Body = emailBuilder.GetEmailContent(swePerson, todaysEvent, moreSweBirths, scraperObject);
+        EmailBuilder emailBuilder = new(swePerson, todaysEvent, moreSweBirths, scraperObject, aiGeneratedEvent);
+        message.Body = emailBuilder.GetEmailContent();
 
         message.IsBodyHtml = true;
 

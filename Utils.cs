@@ -31,7 +31,7 @@ namespace SendEmailConsoleApp
         }
         public static void AddToErrorlog(string text)
         {
-            string errorPath = @"./Errorlogs.txt";
+            string errorPath = @"../Errorlogs.txt";
 
             var dateNow = DateTime.Now;
 

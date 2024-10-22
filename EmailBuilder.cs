@@ -2,28 +2,36 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HistoryEmailService;
 
 namespace SendEmailConsoleApp
 {
   public class EmailBuilder
   {
-    public EmailBuilder()
+    public SweUser TodaysSwePerson { get; set; }
+    public TodaysEvent TodaysEvent { get; set; }
+    public List<SweUser> MoreSweBirths { get; set; }
+    public ScraperObject ScraperObject { get; set; }
+    public AiGeneratedEvent AiGeneratedEvent { get; set; }
+    public EmailBuilder(SweUser todaysSwePerson, TodaysEvent todaysEvent, List<SweUser> moreSweBirths, ScraperObject scraperObject, AiGeneratedEvent aiGeneratedEvent)
     {
+      TodaysSwePerson = todaysSwePerson;
+      TodaysEvent = todaysEvent;
+      MoreSweBirths = moreSweBirths;
+      ScraperObject = scraperObject;
+      AiGeneratedEvent = aiGeneratedEvent;
     }
-    public string GetEmailContent(SweUser swePerson, TodaysEvent todaysEvent,
-    List<SweUser> moreSweBirths, ScraperObject scaperObject)
+    public string GetEmailContent()
     {
       var date = Utils.GetCurrentDate();
 
-      var formatedScrapertext = FormatText(scaperObject.Text!);
+      var firstArtikleFormatedEventText = FormatText(TodaysEvent.FirstArticleExtract.ToString());
+      var secondFormatedEventText = FormatText(TodaysEvent.SecondArticleExtract.ToString());
+      var formatedHeading = FormatText(TodaysEvent.Heading);
 
-      var firstArtikleFormatedEventText = FormatText(todaysEvent.FirstArticleExtract.ToString());
-      var secondFormatedEventText = FormatText(todaysEvent.SecondArticleExtract.ToString());
-      var formatedHeading = FormatText(todaysEvent.Heading);
-
-      var formatedMoreSweBirths = FormatMoreSwePersons(moreSweBirths);
-      var formatedPersonText = FormatText(swePerson.Text);
-
+      var formatedMoreSweBirths = FormatMoreSwePersons(MoreSweBirths);
+      var formatedPersonText = FormatText(TodaysSwePerson.Text);
+      var formatedAiText = FormatText(AiGeneratedEvent.Story);
 
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
@@ -32,35 +40,55 @@ namespace SendEmailConsoleApp
       //<h3 style='color: red;'>Passar bra o skriva meddelanden i </h3>
       //Finns lite text längst ned om man vill skriva meddelande tex välkomna nya premunranter
 
+      // var htmlContent = File.ReadAllText("./mail.html");
+      Console.WriteLine("");
       return $@"
             <html>
               <body style='max-width: 600px''>
+              Nyhet på redaktionen! Varje vecka väljs ett nytt ämne. Utifrån detta ämne kommer det sen en ny historia angående ämnet. DU som abonnent kan också vara med och välja veckans ämne! Klicka på länken för att lämna ditt bidrag.
+              <br>
               <a href='https://www.henrikhall.org/' style='padding:20px; font-size: 1em; background-color: #004b87; border: none; cursor: pointer; border-radius: 3px; color: white;'>Klicka för att lämna ditt tips!</a>
 
-                <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;''> 
+                    <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;'>
 
-                    <h1 style='color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
-                      {scaperObject.Header} <br>
+                    <h1 style=' color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
+                        {AiGeneratedEvent.Subject} <br>
                     </h1>
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
-                  {scaperObject.Text}
-                  <img src='{scaperObject.PictureUrl}'/>
+                    OBS! Text och bild är AI-genererat. Fel kan förekomma men borde vara rätt till 96%.
+                    <br>
+                    {formatedAiText}
+                    <br>
+                      <img src='{AiGeneratedEvent.ImageUrl}' style='max-width: 100%; height: auto;'/>
+                    <br>
+                    Vill du ladda ner bilden? Klicka här
+                </div>
+
+                <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;'> 
+
+                    <h1 style='color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
+                      {ScraperObject.Header} <br>
+                    </h1>
+                </div>
+
+                <div style='border: 1px solid black; padding: 0.5rem;'>
+                  {ScraperObject.Text}
+                  <img src='{ScraperObject.PictureUrl}'/>
                   <br>
-                  {scaperObject.PictureText}
+                  {ScraperObject.PictureText}
                   <br>
                   <div>
-                  {scaperObject.TermsInlineExtraInfo}
-                  
-                  </div>
+                  {ScraperObject.TermsInlineExtraInfo}  
+                </div>
                 </div>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'> 
                     
                     <h1 style='color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
                       Dagens händelse ägde rum <br>
-                       <p style= 'padding: 0.5rem; margin: 0px;'>{date} - {todaysEvent.Year}.</p>
+                       <p style= 'padding: 0.5rem; margin: 0px;'>{date} - {TodaysEvent.Year}.</p>
                     </h1>
 
                 </div>
@@ -73,32 +101,32 @@ namespace SendEmailConsoleApp
 
                   <h3>Artiklar relaterade till händelsen:</h3>
                 
-                  <h2>{todaysEvent.FirstArticleTitle}</h2>
+                  <h2>{TodaysEvent.FirstArticleTitle}</h2>
                   <p>{firstArtikleFormatedEventText}</p>
-                  <img src='{todaysEvent.FirstArticleImageUrl}'/>
-                  <p>Läs mer om artikel 1: <a href='{todaysEvent.FirstArticlePageUrl}'>Wikipedia</a></p>
+                  <img src='{TodaysEvent.FirstArticleImageUrl}'/>
+                  <p>Läs mer om artikel 1: <a href='{TodaysEvent.FirstArticlePageUrl}'>Wikipedia</a></p>
 
                   <hr>
 
-                  <h2 style='font-weight: bold;'>{todaysEvent.SecondArticleTitle}</h2>
+                  <h2 style='font-weight: bold;'>{TodaysEvent.SecondArticleTitle}</h2>
                   {secondFormatedEventText}
-                  <img src='{todaysEvent.SecondArticleImageUrl}'/>
-                  <p>Läs mer om artikel 2: <a href='{todaysEvent.SecondArticlePageUrl}'>Wikipedia</a></p>
+                  <img src='{TodaysEvent.SecondArticleImageUrl}'/>
+                  <p>Läs mer om artikel 2: <a href='{TodaysEvent.SecondArticlePageUrl}'>Wikipedia</a></p>
 
                 </div>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue};'>  
                 
                     <h1 style= 'color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>Dagens födelseperson född <br> 
-                    {date} - {swePerson.BirthYear}.</h1>
+                    {date} - {TodaysSwePerson.BirthYear}.</h1>
                  
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
             
                   <p>{formatedPersonText}</p>
-                  <img src='{swePerson.ImageUrl}'/>
-                  <p>Läs mer om dagens födelseperson på: <a href='{swePerson.PageUrl}'>Wikipedia</a></p>
+                  <img src='{TodaysSwePerson.ImageUrl}'/>
+                  <p>Läs mer om dagens födelseperson på: <a href='{TodaysSwePerson.PageUrl}'>Wikipedia</a></p>
 
 
                 </div>
@@ -111,15 +139,8 @@ namespace SendEmailConsoleApp
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
-                  
-                  <p>Sorterat enligt födesleår (äldst först)</p>
-
                   {formatedMoreSweBirths}
-
                 </div>
-
-               
-
               </body>
             </html>
             ";
@@ -144,8 +165,13 @@ namespace SendEmailConsoleApp
     {
       try
       {
-        var splittedText = extract.Split('.').Select(s => s + ". ").ToList().Select(x => x.Trim()).Where(x => x != ".").ToList();
-        List<string> joined = new();
+        // Ensure there is a space after every period (dot)
+        var splittedText = extract.Split('.')
+                                  .Select(s => s.Trim() + ". ")  // Add space after each period and trim each sentence
+                                  .Where(x => x != ". ")         // Remove empty or single dot results
+                                  .ToList();
+
+        List<string> joined = new List<string>();
 
         for (int i = 0; i < splittedText.Count; i++)
         {
@@ -171,15 +197,18 @@ namespace SendEmailConsoleApp
         else
         {
           var joinedAgain = string.Join(" ", splittedText);
-          joinedAgain.Insert(0, "<p>").Insert(joinedAgain.Length - 1, "<p>");
+          joinedAgain = $"<p>{joinedAgain}</p>"; // Properly wrap the joined text in paragraph tags
           return joinedAgain;
         }
+
         for (int i = 0; i < toLoop.Count; i++)
         {
-          formatedText += $@"</p> <p>";
+          formatedText += "</p> <p>";
 
-          if (toLoop[i] != "")
+          if (!string.IsNullOrEmpty(toLoop[i]))
+          {
             formatedText += $"{toLoop[i]}";
+          }
         }
 
         formatedText += "</p>";
@@ -195,7 +224,7 @@ namespace SendEmailConsoleApp
         }
         return "";
       }
-
     }
+
   }
 }

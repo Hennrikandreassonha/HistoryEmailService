@@ -30,18 +30,18 @@ namespace SendEmailConsoleApp
             });
             return imageResult.Data[0].Url;
         }
-        public async Task<string> InitWeek(string newWeekSubject)
+        private async Task<string> GetCompletion(string systemMessage, string userMessage, float temperature)
         {
             var completionResult = await ChatService.ChatCompletion.CreateCompletion(
             new ChatCompletionCreateRequest
             {
                 Messages = new List<ChatMessage>
                 {
-                new("assistant", "You must tell 7 different titles about subjects that i can write about. Always respond in swedish. Please split the events by *"),
-                new("user", newWeekSubject),
+                new("assistant", systemMessage),
+                new("user", userMessage),
                 },
                 Model = OpenAI.ObjectModels.Models.Gpt_3_5_Turbo,
-                Temperature = 1.0F,
+                Temperature = temperature,
                 MaxTokens = 1000,
                 N = 1
             });
@@ -61,36 +61,28 @@ namespace SendEmailConsoleApp
 
             return "";
         }
-        public async Task<string> SendQuestion(string message)
+
+        public async Task<string> InitWeek(string newWeekSubject)
         {
-            var completionResult = await ChatService.ChatCompletion.CreateCompletion(
-            new ChatCompletionCreateRequest
-            {
-                Messages = new List<ChatMessage>
-                {
-                new("assistant", "Berätta en intressant historia som är minst 500 karaktärer lång. Längst ned skall du också ha en länk till en wikipedia artikel angående historien. Splitta halva historien med \n"),
-                new("user", message),
-                },
-                Model = OpenAI.ObjectModels.Models.Gpt_3_5_Turbo,
-                Temperature = 0.35F,
-                MaxTokens = 1000,
-                N = 1
-            });
+            string systemMessage = $"Give me 7 events or subjects about {newWeekSubject}, these should be bullet points. The historical events should be pretty easy to write about. The essays are going to be 500 characters long. Always respond in Swedish. It is important that these subjects are historically correct. Please split the events by a comma so I can use Split()";
+            return await GetCompletion(systemMessage, newWeekSubject, 0.6F);
+        }
 
-            if (completionResult.Successful)
-            {
-                return completionResult.Choices[0].Message.Content;
-            }
-            else
-            {
-                if (completionResult.Error == null)
-                {
-                    throw new Exception("Unknown Error");
-                }
-                Console.WriteLine($"{completionResult.Error.Code}: {completionResult.Error.Message}");
-            }
+        public async Task<string> SendHistoryQuestion(string message)
+        {
+            string systemMessage = "Berätta en intressant historia som är minst 500 karaktärer lång. Längst ned skall du också ha en länk till en wikipedia artikel angående historien. Historien ska vara verklig och historisk korrekt. Det är viktigt att Splitta halva historien med \n";
+            return await GetCompletion(systemMessage, message, 0.6F);
+        }
 
-            return "";
+        public async Task<string> GetImagePrompt(string message)
+        {
+            string systemMessage = $"Based on this text, generate a prompt suitable for generating an image about the subject. Include good details for the prompt like realistic high quality, and so on. Emphasize on correct colors and correct clothes for this time. The subject is: {message}";
+            return await GetCompletion(systemMessage, message, 0.45F);
+        }
+        public async Task<string> GetReplacementPrompt(string message)
+        {
+            string systemMessage = $"This prompt did not work. Please generate a new one that i can use. Based on this text, generate a prompt suitable for generating an image about the subject. Include good details for the prompt like realistic high quality, and so on. Emphasize on correct colors and correct clothes for this time. The subject is: {message}";
+            return await GetCompletion(systemMessage, message, 0.45F);
         }
         public void ClearList(string filePath)
         {
@@ -115,7 +107,7 @@ namespace SendEmailConsoleApp
     }
     public class ImageGenerationParams
     {
-        public string ModelId { get; set;}
+        public string ModelId { get; set; }
         public string Prompt { get; set; }
         public string OutputFormat { get; set; }
         public int Width { get; set; }
