@@ -106,7 +106,13 @@
 
         p {
             margin-left: 10px;
-
+            font-weight: 500;
+    color: black;
+        }
+        label{
+            font-weight: 500;
+            color: black;
+            
         }
 
         button:hover {
@@ -126,7 +132,7 @@
             <p>Ämnet skulle kunna vara tex Romarriket, Sveriges stormaktstid, Andra världskriget eller något annat som
                 intresserar dig!</p>
             <textarea id="subject" name="subject" placeholder="Ange ditt ämne..."></textarea>
-            <input type="text" id="name" placeholder="Tipsarens namn">
+            <input type="text" id="name" placeholder="Tipsarens namn (Frivilligt)">
             <p id="error" style="color:red; display: none;">Ange ett ämne att skicka</p>
             <p id="succes" style="color:green; display: none;">Ditt ämne har skickats till redaktionen</p>
             <button type="submit" onclick="submitFeedback()">Skicka</button>

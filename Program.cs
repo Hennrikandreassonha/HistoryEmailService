@@ -9,9 +9,7 @@ HttpClient wikiApiClient = new HttpClient();
 
 WikiApi wikiApi = new WikiApi(wikiApiClient);
 
-
 var aiService = new AiService(File.ReadAllLines("../openaiapikey.txt")[0]);
-
 
 var imageApi = new AiImageGenerator(aiService);
 
