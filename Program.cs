@@ -18,7 +18,7 @@ var weeklySubject = "";
 
 var currentDay = "";
 
-weeklySubject = "Karl den 12e";
+// weeklySubject = "Karl den 12e";
 while (true)
 {
     Console.WriteLine("I loop");
@@ -27,10 +27,11 @@ while (true)
     string currentTime = Utils.GetCurrentTime(false, true);
 
     // currentTime == "07" && currentDay != Utils.GetCurrentDate()
-    if (true)
+    if (currentTime == "07" && currentDay != Utils.GetCurrentDate())
     {
         //(int)DateTime.Now.DayOfWeek == 1
-        if ((int)DateTime.Now.DayOfWeek == 1)
+        //Ska egentligen börja på måndag
+        if ((int)DateTime.Now.DayOfWeek == 4)
         {
             weeklySubject = await aiService.InitWeek();
         }
