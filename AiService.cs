@@ -1,3 +1,5 @@
+using System.Text.RegularExpressions;
+using HistoryEmailService;
 using OpenAI.ObjectModels.RequestModels;
 using OpenAI_API;
 using OpenAI_API.Images;
@@ -6,8 +8,11 @@ namespace SendEmailConsoleApp
     public class AiService
     {
         public string ApiKey { get; set; }
-        public OpenAI.Managers.OpenAIService ChatService { get; set; }
+        public OpenAI.Managers.OpenAIService _chatService { get; set; }
+
         private readonly OpenAIAPI _openAIAPI;
+        private readonly ListHandler _listHandler = new ListHandler();
+        public string WeeklySubject { get; set; }
         public AiService()
         {
         }
@@ -15,7 +20,7 @@ namespace SendEmailConsoleApp
         {
             ApiKey = apiKey;
             //Lägga nyckeln i en fil utanför projektet
-            ChatService = new OpenAI.Managers.OpenAIService(new OpenAI.OpenAiOptions()
+            _chatService = new OpenAI.Managers.OpenAIService(new OpenAI.OpenAiOptions()
             {
                 ApiKey = ApiKey
             });
@@ -32,7 +37,7 @@ namespace SendEmailConsoleApp
         }
         private async Task<string> GetCompletion(string systemMessage, string userMessage, float temperature)
         {
-            var completionResult = await ChatService.ChatCompletion.CreateCompletion(
+            var completionResult = await _chatService.ChatCompletion.CreateCompletion(
             new ChatCompletionCreateRequest
             {
                 Messages = new List<ChatMessage>
@@ -61,13 +66,34 @@ namespace SendEmailConsoleApp
 
             return "";
         }
-
-        public async Task<string> InitWeek(string newWeekSubject)
+        private async Task<string> GetWeeklySubject(string filePath)
         {
-            string systemMessage = $"Give me 7 events or subjects about {newWeekSubject}, these should be bullet points. The historical events should be pretty easy to write about. The essays are going to be 500 characters long. Always respond in Swedish. It is important that these subjects are historically correct. Please split the events by a comma so I can use Split()";
-            return await GetCompletion(systemMessage, newWeekSubject, 0.6F);
+            var allWeeklySubjects = File.ReadAllLines(filePath).ToList();
+            string subject;
+            if (allWeeklySubjects.Count == 0)
+            {
+                subject = await GenerateBackUpWeeklySubject();
+                return subject;
+            }
+            Random random = new Random();
+            var index = random.Next(allWeeklySubjects.Count);
+
+            subject = allWeeklySubjects[index];
+            _listHandler.RemoveFromList(filePath, index);
+
+            return subject;
         }
 
+        private async Task<string> GenerateBackUpWeeklySubject()
+        {
+            string systemMessage = $"Please give me a random history subject that i can write small stories about.";
+            return await GetCompletion(systemMessage, "", 0.6F);
+        }
+        private async Task<string> GetBulletPoints(string newWeekSubject)
+        {
+            string systemMessage = $"Give me 7 events or subjects about {newWeekSubject}, these should be bullet points. The historical events should be pretty easy to write about. The essays are going to be 500 characters long. Always respond in Swedish. It is important that these subjects are historically correct. Pleas split stories by '\n'";
+            return await GetCompletion(systemMessage, newWeekSubject, 0.6F);
+        }
         public async Task<string> SendHistoryQuestion(string message)
         {
             string systemMessage = "Berätta en intressant historia som är minst 500 karaktärer lång. Längst ned skall du också ha en länk till en wikipedia artikel angående historien. Historien ska vara verklig och historisk korrekt. Det är viktigt att Splitta halva historien med \n";
@@ -84,25 +110,46 @@ namespace SendEmailConsoleApp
             string systemMessage = $"This prompt did not work. Please generate a new one that i can use. Based on this text, generate a prompt suitable for generating an image about the subject. Include good details for the prompt like realistic high quality, and so on. Emphasize on correct colors and correct clothes for this time. The subject is: {message}";
             return await GetCompletion(systemMessage, message, 0.45F);
         }
-        public void ClearList(string filePath)
+        public async Task<string> InitWeek()
         {
-            var emptyList = new List<string>();
-            File.WriteAllLines(filePath, emptyList);
-        }
-        public void AddSubjectsToList(string filePath, List<string> newSubjects)
-        {
-            var subjectSkips = File.ReadAllLines(filePath).ToList();
-            subjectSkips.AddRange(newSubjects);
-            File.WriteAllLines(filePath, subjectSkips);
-        }
+            string weeklySubject;
+            try
+            {
+                weeklySubject = await GetWeeklySubject("../AiWeeklySubjects.txt");
+                WeeklySubject = weeklySubject;
+                var bulletPoints = await GetBulletPoints($"Subject to generate bullet points about: {weeklySubject}");
+                await AddBulletPointsToList(bulletPoints);
 
-        public string GetSubject(string filePath)
+            }
+
+            catch (Exception ex)
+            {
+                Utils.AddToErrorlog($"Could not init week EX {ex.Message} at Date: {DateTime.Now}");
+                return "";
+            }
+            return weeklySubject;
+        }
+        public async Task<string> GetTodaysStory(string subject)
         {
-            var subjectSkips = File.ReadAllLines(filePath).ToList();
-            string subject = subjectSkips.First();
-            subjectSkips.RemoveAt(0);
-            File.WriteAllLines(filePath, subjectSkips);
-            return subject;
+            var story = await SendHistoryQuestion($"Berätta en historia om detta ämnet: {subject}.");
+            return story;
+        }
+        public async Task AddBulletPointsToList(string bulletPoints)
+        {
+            var pointsSplitted = bulletPoints.Split('\n').ToList();
+            while (pointsSplitted.Count != 7)
+            {
+                var bulletPointsRetry = await GetBulletPoints(WeeklySubject);
+                pointsSplitted = bulletPointsRetry.Split('\n').ToList();
+            }
+            await _listHandler.AddSubjectsToList("../AiSubjects.txt", pointsSplitted);
+        }
+        public async Task<AiGeneratedEvent> GetTodaysEvent(string weeklySubject)
+        {
+            var todaysAiSubject = _listHandler.GetSubject("../AiSubjects.txt");
+            var todaysAiStory = await GetTodaysStory(todaysAiSubject);
+
+            return new AiGeneratedEvent(todaysAiSubject, todaysAiStory,weeklySubject);
         }
     }
     public class ImageGenerationParams

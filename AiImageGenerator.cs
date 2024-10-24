@@ -11,17 +11,25 @@ namespace HistoryEmailService
         public string Subject { get; set; }
         public string Story { get; set; }
         public string ImageUrl { get; set; }
-        public AiGeneratedEvent(string subject, string story, string imageUrl)
+        public string WeeklySubject { get; set; }
+        public AiGeneratedEvent(string subject, string story, string weeklySubject)
         {
             Subject = subject;
             Story = story;
-            ImageUrl = imageUrl;
+            WeeklySubject = weeklySubject;
+        }
+        public bool IsComplete()
+        {
+            return Subject != null && Story != null && WeeklySubject != null && ImageUrl != null;
         }
     }
     public class AiImageGenerator
     {
         private readonly AiService _aiService;
+        public AiImageGenerator()
+        {
 
+        }
         public AiImageGenerator(AiService aiService)
         {
             _aiService = aiService;

@@ -45,12 +45,17 @@ namespace SendEmailConsoleApp
       return $@"
             <html>
               <body style='max-width: 600px''>
-              Nyhet på redaktionen! Varje vecka väljs ett nytt ämne. Utifrån detta ämne kommer det sen en ny historia angående ämnet. DU som abonnent kan också vara med och välja veckans ämne! Klicka på länken för att lämna ditt bidrag.
-              <br>
+              <h4 style='color: red;'> Nyhet på redaktionen! Varje vecka väljs ett nytt ämne. Utifrån detta ämne kommer det sedan en ny historia varje dag angående ämnet. DU som abonnent kan också vara med och välja veckans ämne! Klicka på länken för att lämna ditt bidrag. </h4>
+              <hr>
+              
               <a href='https://www.henrikhall.org/' style='padding:20px; font-size: 1em; background-color: #004b87; border: none; cursor: pointer; border-radius: 3px; color: white;'>Klicka för att lämna ditt tips!</a>
-
+              <br>
                     <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;'>
-
+                    <h4 style=' color: {sweColorYellow};'>
+                      Veckans ämne: {AiGeneratedEvent.WeeklySubject}
+                      <br>
+                      Dag {(DateTime.Now.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)DateTime.Now.DayOfWeek)}/7
+                    </h4>
                     <h1 style=' color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
                         {AiGeneratedEvent.Subject} <br>
                     </h1>
@@ -63,7 +68,7 @@ namespace SendEmailConsoleApp
                     <br>
                       <img src='{AiGeneratedEvent.ImageUrl}' style='max-width: 100%; height: auto;'/>
                     <br>
-                    Vill du ladda ner bilden? Klicka här
+                    Vill du ladda ner bilden? <a href='{AiGeneratedEvent.ImageUrl}'>Klicka här</a>
                 </div>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;'> 
@@ -74,7 +79,7 @@ namespace SendEmailConsoleApp
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
-                  {ScraperObject.Text}
+                  {FormatText(ScraperObject.Text)}
                   <img src='{ScraperObject.PictureUrl}'/>
                   <br>
                   {ScraperObject.PictureText}

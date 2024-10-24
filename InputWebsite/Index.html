@@ -75,6 +75,7 @@
             display: block;
             margin: 10px;
         }
+
         input {
             width: -webkit-fill-available;
             margin-top: 10px;
@@ -88,9 +89,11 @@
             display: block;
             margin: 10px;
         }
-        textarea:focus{
+
+        textarea:focus {
             border-color: #086ec2 !important;
         }
+
         button {
             margin-left: 10px;
             margin-bottom: 10px;
@@ -107,12 +110,13 @@
         p {
             margin-left: 10px;
             font-weight: 500;
-    color: black;
+            color: black;
         }
-        label{
+
+        label {
             font-weight: 500;
             color: black;
-            
+
         }
 
         button:hover {
@@ -128,7 +132,8 @@
     </header>
     <div id="cover-pic">
         <main>
-            <label for="subject">Ange ett ämne eller något som du skulle vilja veta mer om. Redaktionen går sedan igenom ämnen och väljer ett lämpligt.</label>
+            <label for="subject">Ange ett ämne eller något som du skulle vilja veta mer om. Redaktionen går sedan igenom
+                ämnen och väljer ett lämpligt.</label>
             <p>Ämnet skulle kunna vara tex Romarriket, Sveriges stormaktstid, Andra världskriget eller något annat som
                 intresserar dig!</p>
             <textarea id="subject" name="subject" placeholder="Ange ditt ämne..."></textarea>
@@ -147,7 +152,7 @@
         const name = document.getElementById('name').value;
         const succes = document.getElementById('succes');
         const err = document.getElementById('error');
-        sendRequest();
+
         if (subject.trim() === "") {
             err.style.display = 'block';
             succes.style.display = 'none';
@@ -161,7 +166,7 @@
     }
 
     function sendRequest(user, subject) {
-        const url = 'https://32e9-85-226-224-205.ngrok-free.app/History';
+        const url = 'https://2bba-85-227-186-129.ngrok-free.app/History';
         const data = {
             user: user,
             subject: subject
@@ -178,35 +183,32 @@
                 if (!response.ok) {
                     throw new Error('Network response was not ok ' + response.statusText);
                 }
-                return response.json();
+                return response;
             })
             .then(data => {
                 console.log('Success:', data);
             })
-            .catch(error => {
-                console.error('Error:', error);
-            });
     }
-    function getRequest() {
-    const url = 'https://32e9-85-226-224-205.ngrok-free.app/History';
+    // function getRequest() {
+    //     const url = 'https://e99f-85-227-186-129.ngrok-free.app/History';
 
-    fetch(url, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log('Success:', data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
-}
+    //     fetch(url, {
+    //         method: 'GET',
+    //         headers: {
+    //             'Content-Type': 'application/json'
+    //         }
+    //     })
+    //         .then(response => {
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok ' + response.statusText);
+    //             }
+    //             return response.json();
+    //         })
+    //         .then(data => {
+    //             console.log('Success:', data);
+    //         })
+    //         .catch(error => {
+    //             console.error('Error:', error);
+    //         });
+    // }
 </script>

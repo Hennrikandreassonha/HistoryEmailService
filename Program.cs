@@ -10,39 +10,15 @@ HttpClient wikiApiClient = new HttpClient();
 WikiApi wikiApi = new WikiApi(wikiApiClient);
 
 var aiService = new AiService(File.ReadAllLines("../openaiapikey.txt")[0]);
-
 var imageApi = new AiImageGenerator(aiService);
 
-if (true)
-{
-    var subjectToFocus = "Svensks krigsindustri under 1600-2000";
+ListHandler listHandler = new();
 
-    var bulletPoints = await aiService.InitWeek($"Subject to generate bullet points about: {subjectToFocus}");
-    aiService.AddSubjectsToList("../AiSubjects.txt", bulletPoints.Split("*").ToList());
-
-    var subjects = aiService.GetSubject("../AiSubjects.txt");
-
-    aiService.ClearList("SubjectsToSkip.txt");
-    List<string> weekSubjects = bulletPoints.Split('*')
-                                 .Select(x => x.Trim())
-                                 .Where(x => !string.IsNullOrEmpty(x))
-                                 .ToList();
-    aiService.AddSubjectsToList("SubjectsToSkip.txt", weekSubjects);
-}
-
-string subject = new string(aiService.GetSubject("../AiSubjects.txt")
-                               .SkipWhile(x => !char.IsLetter(x))
-                               .ToArray());
-var story = await aiService.SendHistoryQuestion($"Berätta en historia om detta ämnet: {subject}.");
-
-var prompt = await aiService.GetImagePrompt(story);
-
-var imageUrl = await imageApi.TryGetImage(prompt);
-
-AiGeneratedEvent aiGeneratedEvent = new AiGeneratedEvent(subject, story, imageUrl);
+var weeklySubject = "";
 
 var currentDay = "";
 
+weeklySubject = "Karl den 12e";
 while (true)
 {
     Console.WriteLine("I loop");
@@ -50,10 +26,24 @@ while (true)
     //Obs currentTime är formaterat såhär: 07, 11, 19.
     string currentTime = Utils.GetCurrentTime(false, true);
 
-
     // currentTime == "07" && currentDay != Utils.GetCurrentDate()
     if (true)
     {
+        //(int)DateTime.Now.DayOfWeek == 1
+        if ((int)DateTime.Now.DayOfWeek == 1)
+        {
+            weeklySubject = await aiService.InitWeek();
+        }
+        AiGeneratedEvent aiGeneratedEvent = await aiService.GetTodaysEvent(weeklySubject);
+        var prompt = await aiService.GetImagePrompt(aiGeneratedEvent.Story);
+
+        aiGeneratedEvent.ImageUrl = await imageApi.TryGetImage(prompt);
+
+        if (!aiGeneratedEvent.IsComplete())
+        {
+            Utils.AddToErrorlog("AiGenerated Event is not complete");
+        }
+
         Console.WriteLine("Skickar mail");
 
         dynamic response = wikiApi.GetRandomTest();
