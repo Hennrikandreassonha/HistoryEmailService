@@ -28,10 +28,12 @@ while (true)
 
     // currentTime == "07" && currentDay != Utils.GetCurrentDate()
     int hour = int.Parse(currentTime); // Convert currentTime to an integer
+        Console.WriteLine("Skriver timme");
 
     // Now you can compare using integers
     if (currentDay != Utils.GetCurrentDate())
     {
+        Console.WriteLine("Inne i if-satsen");
         //(int)DateTime.Now.DayOfWeek == 1
         //Ska egentligen börja på måndag
         var test = (int)DateTime.Now.DayOfWeek;
