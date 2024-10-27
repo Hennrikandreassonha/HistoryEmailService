@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("SendEmailConsoleApp")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+1145f6faf760a62025ffc223ea66000cd490d889")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0fb6d92c0c6af800f81c1b209697225fb2692531")]
 [assembly: System.Reflection.AssemblyProductAttribute("SendEmailConsoleApp")]
 [assembly: System.Reflection.AssemblyTitleAttribute("SendEmailConsoleApp")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

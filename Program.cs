@@ -27,11 +27,11 @@ while (true)
     string currentTime = Utils.GetCurrentTime(false, true);
 
     // currentTime == "07" && currentDay != Utils.GetCurrentDate()
-    if (currentTime == "07" && currentDay != Utils.GetCurrentDate())
+    if (currentTime == "14" && currentDay != Utils.GetCurrentDate())
     {
         //(int)DateTime.Now.DayOfWeek == 1
         //Ska egentligen börja på måndag
-        if ((int)DateTime.Now.DayOfWeek == 5)
+        if ((int)DateTime.Now.DayOfWeek == 6)
         {
             weeklySubject = await aiService.InitWeek();
         }
