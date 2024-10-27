@@ -27,7 +27,13 @@ while (true)
     string currentTime = Utils.GetCurrentTime(false, true);
 
     // currentTime == "07" && currentDay != Utils.GetCurrentDate()
-    if (currentTime == "14" && currentDay != Utils.GetCurrentDate())
+    int hour = int.Parse(currentTime); // Convert currentTime to an integer
+
+    // Now you can compare using integers
+    if (hour >= 14 && hour < 15 && currentDay != Utils.GetCurrentDate())
+    {
+        // Your code to execute when the condition is true
+    }
     {
         //(int)DateTime.Now.DayOfWeek == 1
         //Ska egentligen börja på måndag
