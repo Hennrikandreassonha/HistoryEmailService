@@ -30,15 +30,14 @@ while (true)
     int hour = int.Parse(currentTime); // Convert currentTime to an integer
 
     // Now you can compare using integers
-    if (hour >= 14 && hour < 15 && currentDay != Utils.GetCurrentDate())
-    {
-        // Your code to execute when the condition is true
-    }
+    if (currentDay != Utils.GetCurrentDate())
     {
         //(int)DateTime.Now.DayOfWeek == 1
         //Ska egentligen börja på måndag
-        if ((int)DateTime.Now.DayOfWeek == 6)
+        var test = (int)DateTime.Now.DayOfWeek;
+        if ((int)DateTime.Now.DayOfWeek == 0)
         {
+            Console.WriteLine("Initar week");
             weeklySubject = await aiService.InitWeek();
         }
         AiGeneratedEvent aiGeneratedEvent = await aiService.GetTodaysEvent(weeklySubject);
@@ -48,6 +47,7 @@ while (true)
 
         if (!aiGeneratedEvent.IsComplete())
         {
+            Console.WriteLine("AiGenerated Event is not complete");
             Utils.AddToErrorlog("AiGenerated Event is not complete");
         }
 
