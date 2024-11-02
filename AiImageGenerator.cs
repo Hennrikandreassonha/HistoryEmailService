@@ -113,5 +113,24 @@ namespace HistoryEmailService
                 }
             }
         }
+        public async Task<byte[]> GetImageBytes(string url)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    // Get the image data as a byte array
+                    byte[] imageData = await client.GetByteArrayAsync(url);
+
+                    // Write the byte array to a file
+                    return imageData;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error downloading image: " + ex.Message);
+                    return Array.Empty<byte>();
+                }
+            }
+        }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using RestSharp;
 
 namespace HistoryEmailService
@@ -23,15 +24,46 @@ namespace HistoryEmailService
         private string[] GetAccessCodes()
         {
             //0 = AccessToken, 1 = ClientID, 2 Client Secret
-            return File.ReadAllLines("../ImgurPass").ToArray();
+            return File.ReadAllLines("../ImgurPass.txt").ToArray();
         }
-        public static void UploadImage(byte[] bytes)
+        public string UploadImage(byte[] bytes, string title, string description)
         {
-            var options = new RestClientOptions("https://api.openai.com/v1/images/generations");
-            
-            var request = new RestRequest("https://api.openai.com/v1/images/generations", Method.Post);
-            request.AddHeader("accept", "application/json");
-            request.AddHeader("authorization", $"Bearer {OpenAiKey}");
+            try
+            {
+                var client = new RestClient("https://api.imgur.com/3/image");
+                var request = new RestRequest("https://api.imgur.com/3/image", Method.Post);
+
+                request.AddHeader("accept", "application/json");
+                request.AddHeader("authorization", $"Bearer {AccessToken}");
+
+                string base64Image = Convert.ToBase64String(bytes);
+
+                request.AddParameter("image", base64Image);
+                request.AddParameter("title", title);
+                request.AddParameter("description", description);
+
+                var response = client.Execute(request);
+
+                if (response.IsSuccessful)
+                {
+                    var jsonResponse = JsonConvert.DeserializeObject<dynamic>(response.Content);
+                    string imageUrl = jsonResponse.data.link;
+                    Console.WriteLine("Image uploaded successfully. URL: " + imageUrl);
+                    return imageUrl;
+                }
+                else
+                {
+                    Console.WriteLine($"Failed to upload image: {response.ErrorMessage}");
+                    return "";
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error uploading file: {ex.Message}");
+                return "";
+            }
         }
+
+
     }
 }

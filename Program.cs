@@ -8,6 +8,7 @@ using SendEmailConsoleApp;
 HttpClient wikiApiClient = new HttpClient();
 
 WikiApi wikiApi = new WikiApi(wikiApiClient);
+ImgurApi imgurApi = new ImgurApi();
 
 var aiService = new AiService(File.ReadAllLines("../openaiapikey.txt")[0]);
 var imageApi = new AiImageGenerator(aiService);
@@ -34,26 +35,28 @@ while (true)
     if (currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Inne i if-satsen");
+        //Denna ska användas: 
         //(int)DateTime.Now.DayOfWeek == 1
         //Ska egentligen börja på måndag
         var test = (int)DateTime.Now.DayOfWeek;
-        if ((int)DateTime.Now.DayOfWeek == 0)
+        if (true)
         {
             Console.WriteLine("Initar week");
             weeklySubject = await aiService.InitWeek();
         }
         AiGeneratedEvent aiGeneratedEvent = await aiService.GetTodaysEvent(weeklySubject);
         var prompt = await aiService.GetImagePrompt(aiGeneratedEvent.Story);
-        ImgurApi.UploadImage()
         var imageUrl = await imageApi.TryGetImage(prompt);
-        await imageApi.DownloadImage(imageUrl, "../downloadedImages");
+        var imageBytes = await imageApi.GetImageBytes(imageUrl);
+        var uploadedUrl = imgurApi.UploadImage(imageBytes, aiGeneratedEvent.Subject, $"Datum: {DateTime.UtcNow}");
+        aiGeneratedEvent.ImageUrl = uploadedUrl;
+
         if (!aiGeneratedEvent.IsComplete())
         {
             Console.WriteLine("AiGenerated Event is not complete");
             Utils.AddToErrorlog("AiGenerated Event is not complete");
         }
 
-        Console.WriteLine("Skickar mail");
 
         dynamic response = wikiApi.GetRandomTest();
 
@@ -62,6 +65,7 @@ while (true)
 
         if (allBirths == null)
         {
+            Utils.AddToErrorlog("Could not get births.");
             continue;
         }
 
@@ -81,7 +85,8 @@ while (true)
         };
 
         await scraperObject.ScrapeAsync();
-
+        Console.WriteLine("Skickar mail");
+        
         MailMessage message = new MailMessage();
 
         string fromEmail = "karinsvaxthus@gmail.com";

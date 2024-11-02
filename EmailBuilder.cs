@@ -62,7 +62,7 @@ namespace SendEmailConsoleApp
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
-                    OBS! Text och bild är AI-genererat. Fel kan förekomma men borde vara rätt till 96%.
+                    OBS! Text och bild är AI-genererat. Fel kan förekomma.
                     <br>
                     {formatedAiText}
                     <br>
