@@ -39,7 +39,7 @@ while (true)
         //(int)DateTime.Now.DayOfWeek == 1
         //Ska egentligen börja på måndag
         var test = (int)DateTime.Now.DayOfWeek;
-        if (true)
+        if ((int)DateTime.Now.DayOfWeek == 6)
         {
             Console.WriteLine("Initar week");
             weeklySubject = await aiService.InitWeek();
