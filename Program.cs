@@ -35,10 +35,20 @@ while (true)
     if (currentDay != Utils.GetCurrentDate())
     {
         Console.WriteLine("Inne i if-satsen");
+
+        dynamic response = wikiApi.GetRandomTest();
+        var allBirths = wikiApi.GetBirths(response);
+
+        if (allBirths == null)
+        {
+            Utils.AddToErrorlog("Could not get births.");
+            continue;
+        }
         //Denna ska användas: 
         //(int)DateTime.Now.DayOfWeek == 1
         //Ska egentligen börja på måndag
         var test = (int)DateTime.Now.DayOfWeek;
+
         if ((int)DateTime.Now.DayOfWeek == 6)
         {
             Console.WriteLine("Initar week");
@@ -55,18 +65,6 @@ while (true)
         {
             Console.WriteLine("AiGenerated Event is not complete");
             Utils.AddToErrorlog("AiGenerated Event is not complete");
-        }
-
-
-        dynamic response = wikiApi.GetRandomTest();
-
-        //Handling the swe birthday person.
-        var allBirths = wikiApi.GetBirths(response);
-
-        if (allBirths == null)
-        {
-            Utils.AddToErrorlog("Could not get births.");
-            continue;
         }
 
         List<SweUser> sweBirths = wikiApi.GetSwePersons(allBirths);
@@ -86,7 +84,7 @@ while (true)
 
         await scraperObject.ScrapeAsync();
         Console.WriteLine("Skickar mail");
-        
+
         MailMessage message = new MailMessage();
 
         string fromEmail = "karinsvaxthus@gmail.com";
