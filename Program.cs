@@ -28,7 +28,7 @@ while (true)
 
     // currentTime == "07" && currentDay != Utils.GetCurrentDate()
     int hour = int.Parse(currentTime); // Convert currentTime to an integer
-        Console.WriteLine("Skriver timme");
+    Console.WriteLine("Skriver timme");
 
     // Now you can compare using integers
     if (currentDay != Utils.GetCurrentDate())
@@ -44,9 +44,9 @@ while (true)
         }
         AiGeneratedEvent aiGeneratedEvent = await aiService.GetTodaysEvent(weeklySubject);
         var prompt = await aiService.GetImagePrompt(aiGeneratedEvent.Story);
-
-        aiGeneratedEvent.ImageUrl = await imageApi.TryGetImage(prompt);
-
+        ImgurApi.
+        var imageUrl = await imageApi.TryGetImage(prompt);
+        await imageApi.DownloadImage(imageUrl, "../downloadedImages");
         if (!aiGeneratedEvent.IsComplete())
         {
             Console.WriteLine("AiGenerated Event is not complete");

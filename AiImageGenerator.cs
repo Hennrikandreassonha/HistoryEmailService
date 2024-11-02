@@ -93,6 +93,25 @@ namespace HistoryEmailService
             var newPrompt = await _aiService.GetReplacementPrompt(oldPrompt);
             return newPrompt;
         }
+        public async Task DownloadImage(string url, string filePath)
+        {
+            using (HttpClient client = new HttpClient())
+            {
+                try
+                {
+                    // Get the image data as a byte array
+                    byte[] imageData = await client.GetByteArrayAsync(url);
 
+                    // Write the byte array to a file
+                    await File.WriteAllBytesAsync(filePath, imageData);
+
+                    Console.WriteLine("Image downloaded successfully to " + filePath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Error downloading image: " + ex.Message);
+                }
+            }
+        }
     }
 }
