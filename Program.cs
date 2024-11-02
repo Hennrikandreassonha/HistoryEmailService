@@ -44,7 +44,7 @@ while (true)
         }
         AiGeneratedEvent aiGeneratedEvent = await aiService.GetTodaysEvent(weeklySubject);
         var prompt = await aiService.GetImagePrompt(aiGeneratedEvent.Story);
-        ImgurApi.
+        ImgurApi.UploadImage()
         var imageUrl = await imageApi.TryGetImage(prompt);
         await imageApi.DownloadImage(imageUrl, "../downloadedImages");
         if (!aiGeneratedEvent.IsComplete())
