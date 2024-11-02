@@ -68,9 +68,7 @@ namespace SendEmailConsoleApp
         }
         public async Task AddSubjectsToList(string filePath, List<string> newSubjects)
         {
-            var subjectSkips = File.ReadAllLines(filePath).ToList();
-            subjectSkips.AddRange(newSubjects);
-            File.WriteAllLines(filePath, subjectSkips);
+            File.WriteAllLines(filePath, newSubjects);
         }
         public void AddSubjectToList(string filePath, string subject)
         {
