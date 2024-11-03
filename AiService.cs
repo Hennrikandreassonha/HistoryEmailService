@@ -87,19 +87,24 @@ namespace SendEmailConsoleApp
         private async Task<string> GenerateBackUpWeeklySubject()
         {
             string systemMessage = $"Please give me a random history subject that i can write small stories about.";
-            return await GetCompletion(systemMessage, "", 0.6F);
+            return await GetCompletion(systemMessage, "", 0.15F);
         }
         private async Task<string> GetBulletPoints(string newWeekSubject)
         {
             string systemMessage = $"Give me 7 events or subjects about {newWeekSubject}, these should be bullet points. The historical events should be pretty easy to write about. The essays are going to be 500 characters long. Always respond in Swedish. It is important that these subjects are historically correct. Pleas split stories by '\n'";
-            return await GetCompletion(systemMessage, newWeekSubject, 0.6F);
+            return await GetCompletion(systemMessage, newWeekSubject, 0.15F);
         }
-        public async Task<string> SendHistoryQuestion(string message)
+        public async Task<string> SendHistoryQuestion(string message, string weeklySubject)
         {
-            string systemMessage = "Berätta en intressant historia som är minst 500 karaktärer lång. Längst ned skall du också ha en länk till en wikipedia artikel angående historien. Historien ska vara verklig och historisk korrekt. Det är viktigt att Splitta halva historien med \n";
-            return await GetCompletion(systemMessage, message, 0.6F);
+            string systemMessage = $"OBS: Contexten för historian är: {weeklySubject} Berätta en intressant historia som är minst 500 karaktärer lång. Längst ned skall du också ha en länk till en wikipedia artikel angående historien. Skriv alltid på svenska. Historien ska vara verklig och historisk korrekt. Det är viktigt att Splitta halva historien med \n";
+            return await GetCompletion(systemMessage, message, 0.1F);
         }
-
+        public async Task<string> ConfirmHistoryQuestion(string generatedText, string weeklySubject)
+        {
+            string systemMessage = "Du är en historisk granskare. Du kommer att få en text och ämnet som texten handlar om. Texten har också ett ämne som den tillhör, det är viktigt att den är korrekt kopplad till ämnet. Du svarar endast: KORREKT om texten är korrekt. Om den inte är korrekt svara 'Ej korrekt'.";
+            string message = $"Är denna texten är historisk korrekt? Texten tillhör ämnet: {weeklySubject} TEXT: {generatedText}. Om den är korrekt svara endast :'KORREKT'.";
+            return await GetCompletion(systemMessage, message, 0.15F);
+        }
         public async Task<string> GetImagePrompt(string message)
         {
             string systemMessage = $"Based on this text, generate a prompt suitable for generating an image about the subject. Include good details for the prompt like realistic high quality, and so on. Emphasize on correct colors and correct clothes for this time. The subject is: {message}";
@@ -129,9 +134,20 @@ namespace SendEmailConsoleApp
             }
             return weeklySubject;
         }
-        public async Task<string> GetTodaysStory(string subject)
+        public async Task<string> GetTodaysStory(string subject, string weeklySubject)
         {
-            var story = await SendHistoryQuestion($"Berätta en historia om detta ämnet: {subject}.");
+            string textIsCorrect = "";
+            var story = "";
+            while (textIsCorrect.ToUpper() != "KORREKT")
+            {
+                story = await SendHistoryQuestion($"Berätta en historia om detta ämnet: {subject}.", weeklySubject);
+                textIsCorrect = await ConfirmHistoryQuestion(story, weeklySubject);
+
+                if (textIsCorrect != "KORREKT")
+                {
+                    Utils.AddToErrorlog($"Text var inte korrekt {story}. Svaret från Confirm: {textIsCorrect} Datum :{DateTime.Now}");
+                }
+            }
             return story;
         }
         public async Task AddBulletPointsToList(string bulletPoints)
@@ -147,9 +163,9 @@ namespace SendEmailConsoleApp
         public async Task<AiGeneratedEvent> GetTodaysEvent(string weeklySubject)
         {
             var todaysAiSubject = _listHandler.GetSubject("../AiSubjects.txt");
-            var todaysAiStory = await GetTodaysStory(todaysAiSubject);
+            var todaysAiStory = await GetTodaysStory(todaysAiSubject, weeklySubject);
 
-            return new AiGeneratedEvent(todaysAiSubject, todaysAiStory,weeklySubject);
+            return new AiGeneratedEvent(todaysAiSubject, todaysAiStory, weeklySubject);
         }
     }
     public class ImageGenerationParams

@@ -47,24 +47,27 @@ while (true)
         //Denna ska användas: 
         //(int)DateTime.Now.DayOfWeek == 1
         //Ska egentligen börja på måndag
+        //Måndag är 1, söndag 0
         var test = (int)DateTime.Now.DayOfWeek;
 
-        if ((int)DateTime.Now.DayOfWeek == 6)
+        if ((int)DateTime.Now.DayOfWeek == 0)
         {
             Console.WriteLine("Initar week");
             weeklySubject = await aiService.InitWeek();
         }
+        Console.WriteLine("Starting AI event");
         AiGeneratedEvent aiGeneratedEvent = await aiService.GetTodaysEvent(weeklySubject);
         var prompt = await aiService.GetImagePrompt(aiGeneratedEvent.Story);
         var imageUrl = await imageApi.TryGetImage(prompt);
         var imageBytes = await imageApi.GetImageBytes(imageUrl);
-        var uploadedUrl = imgurApi.UploadImage(imageBytes, aiGeneratedEvent.Subject, $"Datum: {DateTime.UtcNow}");
+        var uploadedUrl = imgurApi.UploadImage(imageBytes, aiGeneratedEvent.Subject, $"Datum: {DateTime.UtcNow} Prompt: {prompt}");
         aiGeneratedEvent.ImageUrl = uploadedUrl;
 
         if (!aiGeneratedEvent.IsComplete())
         {
             Console.WriteLine("AiGenerated Event is not complete");
             Utils.AddToErrorlog("AiGenerated Event is not complete");
+            continue;
         }
 
         List<SweUser> sweBirths = wikiApi.GetSwePersons(allBirths);
