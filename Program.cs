@@ -15,6 +15,8 @@ var aiService = new AiService(File.ReadAllLines("../HistoryEmailDocs/openaiapike
 var imageApi = new AiImageGenerator(aiService);
 
 ListHandler listHandler = new();
+        Utils.AddToErrorlog($" errTest");
+
 
 var weeklySubject = "";
 
@@ -59,7 +61,14 @@ while (true)
         if ((int)DateTime.Now.DayOfWeek == 3)
         {
             Console.WriteLine("Initar week");
-            weeklySubject = await aiService.InitWeek();
+            try
+            {
+                weeklySubject = await aiService.InitWeek();
+            }
+            catch (Exception ex)
+            {
+                Utils.AddToErrorlog($"Err {ex.Message}");
+            }
         }
         Console.WriteLine("Starting AI event");
         var todaysSubject = _listHandler.GetSubject("../HistoryEmailDocs/AiSubjects.txt");

@@ -144,7 +144,7 @@ new ChatCompletionCreateRequest
             catch (Exception ex)
             {
                 Utils.AddToErrorlog($"Could not init week EX {ex.Message} at Date: {DateTime.Now}");
-                return "";
+                throw;
             }
             return weeklySubject;
         }
