@@ -31,7 +31,8 @@ namespace SendEmailConsoleApp
         }
         public static void AddToErrorlog(string text)
         {
-            string errorPath = @"../Errorlogs.txt";
+            string errorPath = @"../HistoryEmailDocs/Errorlogs.txt";
+            var allWeeklySubjects = File.ReadAllLines(errorPath).ToList();
 
             var dateNow = DateTime.Now;
 
