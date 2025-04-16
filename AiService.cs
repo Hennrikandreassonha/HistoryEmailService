@@ -19,10 +19,9 @@ namespace SendEmailConsoleApp
         public AiService(string apiKey)
         {
             ApiKey = apiKey;
-            //Lägga nyckeln i en fil utanför projektet
             _chatService = new OpenAI.Managers.OpenAIService(new OpenAI.OpenAiOptions()
             {
-                ApiKey = ApiKey
+                ApiKey = ApiKey,
             });
             _openAIAPI = new OpenAIAPI(apiKey);
         }
@@ -35,21 +34,31 @@ namespace SendEmailConsoleApp
             });
             return imageResult.Data[0].Url;
         }
-        private async Task<string> GetCompletion(string systemMessage, string userMessage, float temperature)
+        private async Task<string> GetCompletion(string systemMessage, string userMessage, float temperature, bool webSearch = false)
         {
             var completionResult = await _chatService.ChatCompletion.CreateCompletion(
-            new ChatCompletionCreateRequest
+new ChatCompletionCreateRequest
+{
+    Messages = new List<ChatMessage>
+    {
+        new ChatMessage("assistant", systemMessage),
+        new ChatMessage("user", userMessage),
+    },
+    Model = OpenAI.ObjectModels.Models.Gpt_4,
+    Temperature = temperature,
+    N = 1,
+    Tools = webSearch ? new List<ToolDefinition>
+    {
+        new ToolDefinition
+        {
+            Type = "function", // Tool type is "function"
+            Function = new FunctionDefinition
             {
-                Messages = new List<ChatMessage>
-                {
-                new("assistant", systemMessage),
-                new("user", userMessage),
-                },
-                Model = OpenAI.ObjectModels.Models.Gpt_3_5_Turbo,
-                Temperature = temperature,
-                MaxTokens = 1000,
-                N = 1
-            });
+                Name = "web_search_preview",
+            }
+        }
+    } : null
+});
 
             if (completionResult.Successful)
             {
@@ -76,28 +85,28 @@ namespace SendEmailConsoleApp
                 return subject;
             }
             Random random = new Random();
-            var index = random.Next(allWeeklySubjects.Count);
+            // var index = random.Next(allWeeklySubjects.Count);
 
-            subject = allWeeklySubjects[index];
-            _listHandler.RemoveFromList(filePath, index);
+            subject = allWeeklySubjects.First();
+            _listHandler.RemoveFromList(filePath, 0);
 
             return subject;
         }
 
         private async Task<string> GenerateBackUpWeeklySubject()
         {
-            string systemMessage = $"Please give me a random history subject that i can write small stories about.";
+            string systemMessage = $"Ge mig ett slumpmässigt historieämne som jag kan skriva små berättelser om. På svenska! Endast ämnet";
             return await GetCompletion(systemMessage, "", 0.15F);
         }
         private async Task<string> GetBulletPoints(string newWeekSubject)
         {
-            string systemMessage = $"Give me 7 events or subjects about {newWeekSubject}, these should be bullet points. The historical events should be pretty easy to write about. The essays are going to be 500 characters long. Always respond in Swedish. It is important that these subjects are historically correct. Pleas split stories by '\n'";
+            string systemMessage = $"Give me 7 events or subjects about {newWeekSubject}, these should be bullet points. The essays are going to be 500 characters long. Always respond in Swedish. It is important that these subjects are historically correct. Pleas split stories by '\n'. Only return the heading";
             return await GetCompletion(systemMessage, newWeekSubject, 0.15F);
         }
         public async Task<string> SendHistoryQuestion(string message, string weeklySubject)
         {
-            string systemMessage = $"OBS: Contexten för historian är: {weeklySubject} Berätta en intressant historia som är minst 500 karaktärer lång. Längst ned skall du också ha en länk till en wikipedia artikel angående historien. Skriv alltid på svenska. Historien ska vara verklig och historisk korrekt. Det är viktigt att Splitta halva historien med \n";
-            return await GetCompletion(systemMessage, message, 0.1F);
+            string systemMessage = $"Contexten för historian är: {weeklySubject}.  Skriv alltid på svenska. Du skall utgå från källor på nätet och refera till dessa längst ned med Källor: Det är viktigt att Splitta halva historien med \n";
+            return await GetCompletion(systemMessage, message, 0.1F, true);
         }
         public async Task<string> ConfirmHistoryQuestion(string generatedText, string weeklySubject)
         {
@@ -115,12 +124,17 @@ namespace SendEmailConsoleApp
             string systemMessage = $"This prompt did not work. Please generate a new one that i can use. Based on this text, generate a prompt suitable for generating an image about the subject. Include good details for the prompt like realistic high quality, and so on. Emphasize on correct colors and correct clothes for this time. The subject is: {message}";
             return await GetCompletion(systemMessage, message, 0.45F);
         }
+        public async Task<string> GetImagePromptGoogle(string message)
+        {
+            string systemMessage = $"Based on this heading. Generate a search query that i can use to get images from google: {message}, Should be short for example 'Vikingarnas handelsresor till östra Europa och Mellanöstern' could be 'Vikingarnas handelsresor europa'. Just take the bullet words and in swedish please";
+            return await GetCompletion(systemMessage, message, 0.45F);
+        }
         public async Task<string> InitWeek()
         {
             string weeklySubject;
             try
             {
-                weeklySubject = await GetWeeklySubject("../AiWeeklySubjects.txt");
+                weeklySubject = await GetWeeklySubject("../HistoryEmailDocs/AiWeeklySubjects.txt");
                 WeeklySubject = weeklySubject;
                 var bulletPoints = await GetBulletPoints($"Subject to generate bullet points about: {weeklySubject}");
                 await AddBulletPointsToList(bulletPoints);
@@ -138,16 +152,16 @@ namespace SendEmailConsoleApp
         {
             string textIsCorrect = "";
             var story = "";
-            while (textIsCorrect.ToUpper() != "KORREKT")
-            {
-                story = await SendHistoryQuestion($"Berätta en historia om detta ämnet: {subject}.", weeklySubject);
-                textIsCorrect = await ConfirmHistoryQuestion(story, weeklySubject);
+            // while (textIsCorrect.ToUpper() != "KORREKT")
+            // {
+                story = await SendHistoryQuestion($"Information om detta ämnet: {subject}.", weeklySubject);
+                // textIsCorrect = await ConfirmHistoryQuestion(story, weeklySubject);
 
-                if (textIsCorrect != "KORREKT")
-                {
-                    Utils.AddToErrorlog($"Text var inte korrekt {story}. Svaret från Confirm: {textIsCorrect} Datum :{DateTime.Now}");
-                }
-            }
+                // if (textIsCorrect != "KORREKT")
+                // {
+                //     Utils.AddToErrorlog($"Text var inte korrekt {story}. Svaret från Confirm: {textIsCorrect} Datum :{DateTime.Now}");
+                // }
+            // }
             return story;
         }
         public async Task AddBulletPointsToList(string bulletPoints)
@@ -158,14 +172,13 @@ namespace SendEmailConsoleApp
                 var bulletPointsRetry = await GetBulletPoints(WeeklySubject);
                 pointsSplitted = bulletPointsRetry.Split('\n').ToList();
             }
-            await _listHandler.AddSubjectsToList("../AiSubjects.txt", pointsSplitted);
+            await _listHandler.AddSubjectsToList("../HistoryEmailDocs/AiSubjects.txt", pointsSplitted);
         }
-        public async Task<AiGeneratedEvent> GetTodaysEvent(string weeklySubject)
+        public async Task<AiGeneratedEvent> GetTodaysEvent(string weeklySubject, string todaysSubject)
         {
-            var todaysAiSubject = _listHandler.GetSubject("../AiSubjects.txt");
-            var todaysAiStory = await GetTodaysStory(todaysAiSubject, weeklySubject);
+            var todaysAiStory = await GetTodaysStory(todaysSubject, weeklySubject);
 
-            return new AiGeneratedEvent(todaysAiSubject, todaysAiStory, weeklySubject);
+            return new AiGeneratedEvent(todaysSubject, todaysAiStory, weeklySubject);
         }
     }
     public class ImageGenerationParams

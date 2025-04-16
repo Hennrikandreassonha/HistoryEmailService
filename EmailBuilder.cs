@@ -31,7 +31,6 @@ namespace SendEmailConsoleApp
 
       var formatedMoreSweBirths = FormatMoreSwePersons(MoreSweBirths);
       var formatedPersonText = FormatText(TodaysSwePerson.Text);
-      var formatedAiText = FormatText(AiGeneratedEvent.Story);
 
       var sweColorYellow = "#ffcd00";
       var sweColorBlue = "#004b87";
@@ -45,30 +44,31 @@ namespace SendEmailConsoleApp
       return $@"
             <html>
               <body style='max-width: 600px''>
-              <h4 style='color: red;'> Nyhet på redaktionen! Varje vecka väljs ett nytt ämne. Utifrån detta ämne kommer det sedan en ny historia varje dag angående ämnet. DU som abonnent kan också vara med och välja veckans ämne! Klicka på länken för att lämna ditt bidrag. </h4>
-              <hr>
-              
-              <a href='https://www.henrikhall.org/' style='padding:20px; font-size: 1em; background-color: #004b87; border: none; cursor: pointer; border-radius: 3px; color: white;'>Klicka för att lämna ditt tips!</a>
-              <br>
                     <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;'>
-                    <h4 style=' color: {sweColorYellow};'>
-                      Veckans ämne: {AiGeneratedEvent.WeeklySubject}
-                      <br>
-                      Dag {(DateTime.Now.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)DateTime.Now.DayOfWeek)}/7
-                    </h4>
-                    <h1 style=' color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
-                        {AiGeneratedEvent.Subject} <br>
-                    </h1>
-                </div>
+                      <h4 style=' color: {sweColorYellow};'>
+                        Veckans ämne: {AiGeneratedEvent.WeeklySubject}
+                        <br>
+                        Dag {(DateTime.Now.DayOfWeek == DayOfWeek.Sunday ? 7 : (int)DateTime.Now.DayOfWeek)}/7
+                      </h4>
+                      <h1 style=' color: {sweColorYellow}; padding: 0.5rem; {textCenter}'>
+                          {AiGeneratedEvent.Subject} <br>
+                      </h1>
+                    </div>
 
-                <div style='border: 1px solid black; padding: 0.5rem;'>
-                    OBS! Text och bild är AI-genererat. Fel kan förekomma.
-                    <br>
-                    {formatedAiText}
-                    <br>
-                      <img src='{AiGeneratedEvent.ImageUrl}' style='max-width: 100%; height: auto;'/>
-                    <br>
-                    Vill du ladda ner bilden? <a href='{AiGeneratedEvent.ImageUrl}'>Klicka här</a>
+                {FormatText(AiGeneratedEvent.Story)}
+
+                <div style='width: 100%; 'border: 1px solid black; padding: 0.5rem;'>
+                  <div style='display: flex;'>
+                    <img src='{AiGeneratedEvent.Images[0].Key}' width='50%'>
+                    <img src='{AiGeneratedEvent.Images[1].Key}' width='50%'>
+                  </div>
+                  <br>
+                  <div style='width:50%; display:inline-block;'>
+                    {AiGeneratedEvent.Images[0].Value}
+                   </div>
+                  <div style='display:inline-block;'>
+                      {AiGeneratedEvent.Images[1].Value}
+                  </div> 
                 </div>
 
                 <div style='border: 1px solid {sweColorYellow}; background-color: {sweColorBlue}; padding: 0.5rem;'> 
@@ -79,7 +79,7 @@ namespace SendEmailConsoleApp
                 </div>
 
                 <div style='border: 1px solid black; padding: 0.5rem;'>
-                  {FormatText(ScraperObject.Text)}
+                  {ScraperObject.Text}
                   <img src='{ScraperObject.PictureUrl}'/>
                   <br>
                   {ScraperObject.PictureText}

@@ -1,4 +1,6 @@
 using System;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Linq;
 using RestSharp;
@@ -10,8 +12,9 @@ namespace HistoryEmailService
     {
         public string Subject { get; set; }
         public string Story { get; set; }
-        public string ImageUrl { get; set; }
         public string WeeklySubject { get; set; }
+        public List<KeyValuePair<string, string>> Images { get; set; }
+
         public AiGeneratedEvent(string subject, string story, string weeklySubject)
         {
             Subject = subject;
@@ -20,7 +23,7 @@ namespace HistoryEmailService
         }
         public bool IsComplete()
         {
-            return Subject != null && Story != null && WeeklySubject != null && ImageUrl != null;
+            return Subject != null && Story != null && WeeklySubject != null && Images.Count != 0;
         }
     }
     public class AiImageGenerator
@@ -34,7 +37,7 @@ namespace HistoryEmailService
         {
             _aiService = aiService;
         }
-        public static string OpenAiKey = File.ReadAllLines("../openaiapikey.txt")[0];
+        public static string OpenAiKey = File.ReadAllLines("../HistoryEmailDocs/openaiapikey.txt")[0];
         private async Task<string> GenerateImage(string prompt)
         {
             var options = new RestClientOptions("https://api.openai.com/v1/images/generations");
@@ -50,7 +53,8 @@ namespace HistoryEmailService
                 prompt,
                 n = 1,
                 size = "1024x1024",
-                model = "dall-e-3"
+                model = "dall-e-3",
+                type = "web_search_preview"
             };
             request.AddJsonBody(imageParams);
 
@@ -132,5 +136,70 @@ namespace HistoryEmailService
                 }
             }
         }
+
+        public async Task<string> SearchWithWeb(string todaysSubject, string weeklySubject)
+        {
+            var prompt = $"Ge mig lite information om {todaysSubject}. Kontexten är: {weeklySubject}. Du ska skriva en berättelse på cirka 300 ord och även ange källor till detta. Källorna ska placeras längst ner (med länkar) och texten ska inte visa några källor. På Svenska";
+
+            var options = new RestClientOptions("https://api.openai.com/v1/responses");
+            var client = new RestClient(options);
+
+            var request = new RestRequest("https://api.openai.com/v1/responses", Method.Post);
+            request.AddHeader("accept", "application/json");
+            request.AddHeader("authorization", $"Bearer {OpenAiKey}");
+
+            var tools = new[] { new { type = "web_search_preview" } };
+            var requestBody = new
+            {
+                model = "gpt-4.1",
+                tools,
+                input = prompt
+            };
+
+            request.AddJsonBody(requestBody);
+
+            var response = await client.ExecuteAsync(request);
+            if (response == null || !response.IsSuccessful || string.IsNullOrWhiteSpace(response.Content))
+            {
+                return "Failed to generate image: " + response?.ErrorMessage;
+            }
+
+            using JsonDocument doc = JsonDocument.Parse(response.Content);
+            var outputArray = doc.RootElement.GetProperty("output");
+
+            var resultBuilder = new StringBuilder();
+
+            foreach (var item in outputArray.EnumerateArray())
+            {
+                if (item.GetProperty("type").GetString() == "message")
+                {
+                    var contentArray = item.GetProperty("content");
+
+                    foreach (var contentItem in contentArray.EnumerateArray())
+                    {
+                        if (contentItem.GetProperty("type").GetString() == "output_text")
+                        {
+                            if (contentItem.TryGetProperty("text", out var textElement))
+                            {
+                                resultBuilder.AppendLine(textElement.GetString());
+                            }
+                            if (contentItem.TryGetProperty("annotations", out var annotations))
+                            {
+                                foreach (var annotation in annotations.EnumerateArray())
+                                {
+                                    string title = annotation.GetProperty("title").GetString();
+                                    string url = annotation.GetProperty("url").GetString();
+
+                                    resultBuilder.AppendLine($"\nSource: {title} — {url}");
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            return resultBuilder.Length > 0 ? resultBuilder.ToString() : "No relevant content found.";
+        }
+
     }
 }

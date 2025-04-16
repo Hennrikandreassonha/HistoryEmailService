@@ -1,16 +1,17 @@
 ﻿using System.Net;
 using System.Net.Mail;
-using System.Runtime.CompilerServices;
 using HistoryEmailService;
-using RestSharp;
 using SendEmailConsoleApp;
 
 HttpClient wikiApiClient = new HttpClient();
 
 WikiApi wikiApi = new WikiApi(wikiApiClient);
-ImgurApi imgurApi = new ImgurApi();
+ListHandler _listHandler = new ListHandler();
+GoogleImageApi googleImageApi = new();
 
-var aiService = new AiService(File.ReadAllLines("../openaiapikey.txt")[0]);
+AiImageGenerator aiImage = new();
+
+var aiService = new AiService(File.ReadAllLines("../HistoryEmailDocs/openaiapikey.txt")[0]);
 var imageApi = new AiImageGenerator(aiService);
 
 ListHandler listHandler = new();
@@ -49,19 +50,25 @@ while (true)
         //Ska egentligen börja på måndag
         //Måndag är 1, söndag 0
         var test = (int)DateTime.Now.DayOfWeek;
+        ScraperObject scraperObject = new()
+        {
+            Url = "https://www.so-rummet.se/aret-runt"
+        };
 
-        if ((int)DateTime.Now.DayOfWeek == 0)
+        await scraperObject.ScrapeAsync();
+        if ((int)DateTime.Now.DayOfWeek == 3)
         {
             Console.WriteLine("Initar week");
             weeklySubject = await aiService.InitWeek();
         }
         Console.WriteLine("Starting AI event");
-        AiGeneratedEvent aiGeneratedEvent = await aiService.GetTodaysEvent(weeklySubject);
-        var prompt = await aiService.GetImagePrompt(aiGeneratedEvent.Story);
-        var imageUrl = await imageApi.TryGetImage(prompt);
-        var imageBytes = await imageApi.GetImageBytes(imageUrl);
-        var uploadedUrl = imgurApi.UploadImage(imageBytes, aiGeneratedEvent.Subject, $"Datum: {DateTime.UtcNow} Prompt: {prompt}");
-        aiGeneratedEvent.ImageUrl = uploadedUrl;
+        var todaysSubject = _listHandler.GetSubject("../HistoryEmailDocs/AiSubjects.txt");
+        AiGeneratedEvent aiGeneratedEvent = await aiService.GetTodaysEvent(weeklySubject, todaysSubject);
+        aiGeneratedEvent.WeeklySubject = weeklySubject;
+        string imageSearchPrompt = await aiService.GetImagePromptGoogle(todaysSubject);
+        aiGeneratedEvent.Images = await googleImageApi.GetImageLinksWithClickAsync(imageSearchPrompt);
+
+        aiGeneratedEvent.Story = await aiImage.SearchWithWeb(todaysSubject, weeklySubject);
 
         if (!aiGeneratedEvent.IsComplete())
         {
@@ -80,12 +87,6 @@ while (true)
         var allEvents = response.events;
         TodaysEvent todaysEvent = wikiApi.GetEvent(allEvents);
 
-        ScraperObject scraperObject = new()
-        {
-            Url = "https://www.so-rummet.se/aret-runt"
-        };
-
-        await scraperObject.ScrapeAsync();
         Console.WriteLine("Skickar mail");
 
         MailMessage message = new MailMessage();

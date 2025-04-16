@@ -24,7 +24,7 @@ namespace HistoryEmailService
         private string[] GetAccessCodes()
         {
             //0 = AccessToken, 1 = ClientID, 2 Client Secret
-            return File.ReadAllLines("../ImgurPass.txt").ToArray();
+            return File.ReadAllLines("../HistoryEmailDocs/ImgurPass.txt").ToArray();
         }
         public string UploadImage(byte[] bytes, string title, string description)
         {

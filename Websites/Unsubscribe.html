@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="sv">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+    <title>Dagens historia</title>
+    <link rel="stylesheet"
+        href="styles.css">
+    <script src="javascript.js"></script>
+</head>
+
+<body>
+    <header>
+        <h1>Dagens historia</h1>
+    </header>
+    <div id="cover-pic">
+        <main style="display: flex; justify-content: center; padding:2rem 0.5rem; flex-direction: column;">
+            <input type="text"
+                id="email"
+                placeholder="Ange E-Post för att avsluta din prenumenration">
+            <button style="align-self: center;"
+                onclick="unsubscribe()"> Tryck för att avsluta prenumeration</button>
+            <h2 style="text-align: center; display:none;"
+                id="success">Din prenumeration har avslutats!</h2>
+            <h2 style="text-align: center; display:none; color:red;"
+                id="error">Det gick inte att avsluta prenumerationen. Försök igen senare.</h2>
+        </main>
+    </div>
+</body>
+
+</html>
